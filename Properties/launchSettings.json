@@ -1,0 +1,32 @@
+{
+  "profiles": {
+    "http": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "dotnetRunMessages": true,
+      "applicationUrl": "http://localhost:5051"
+    },
+    "Container (Dockerfile)": {
+      "commandName": "Docker",
+      "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}",
+      "environmentVariables": {
+        "ASPNETCORE_HTTP_PORTS": "3000",
+        "APP_PORT": "3000",
+        "APP_MODE": "DEV",
+        "SECURITY_TOKEN": "soyuntokenxd",
+        "ENCRYPTION_KEY": "123456789012",
+        "DB_HOST": "host.docker.internal",
+        "DB_PORT": "5432",
+        "DB_NAME": "fuagenerator",
+        "DB_USER": "fuagenerator",
+        "DB_PASSWORD": "fuagenerator"
+      },
+      "httpPort": 3000,
+      "publishAllPorts": false,
+      "useSSL": false
+    }
+  },
+  "$schema": "https://json.schemastore.org/launchsettings.json"
+}

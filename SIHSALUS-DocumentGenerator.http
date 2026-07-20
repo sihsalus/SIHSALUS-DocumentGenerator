@@ -1,0 +1,6 @@
+@SIHSALUS_DocumentGenerator_HostAddress = http://localhost:5051
+
+GET {{SIHSALUS_DocumentGenerator_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

@@ -1,0 +1,8 @@
+bin/
+obj/
+.vs/
+
+# Environment secrets
+.env
+.env.*
+!.env.example
