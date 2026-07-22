@@ -80,7 +80,7 @@ namespace SIHSALUS_DocumentGenerator.Controllers
 
             var documentSchema = schemaImplementation.Create();
 
-            string htmlResponse = documentSchema.Render(true);
+            string htmlResponse = documentSchema.Render(printLayout: false);
 
 
             return Content(htmlResponse, "text/html");

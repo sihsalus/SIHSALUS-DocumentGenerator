@@ -9,9 +9,12 @@ public interface IDocumentMappingContract
     DocumentMapping Create();
 }
 
+
+
 public abstract record BaseFieldMapping
 {
     public required string codeName { get; set; }
+    
 }
 
 public record SectionMapping
@@ -28,6 +31,6 @@ public record PageMapping
 
 public record DocumentMapping
 {
-    public List<PageMapping>? pages { get; set; }
+    public List<PageMapping>? pages { get; set; } = [];
     public string name { get; set; } = string.Empty;
 }

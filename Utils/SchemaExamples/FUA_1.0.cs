@@ -26,6 +26,8 @@ public class DocumentSchemaImplementation : IDocumentSchemaContract
                             showTitle = false,
                             top = 0.0,
                             left = 0.0,
+                            bodyHeight = 10.0,
+                            bodyWidth = 192.0,
                             fields = []
                         },
                         new SectionSchema
@@ -45,10 +47,10 @@ public class DocumentSchemaImplementation : IDocumentSchemaContract
                                     top = 2.4,
                                     left = 0.0,
                                     showLabel = true,
+                                    label = "FECHA DE ATENCIÓN",
                                     labelPosition = LabelPosition.Top,
                                     labelOrientation = LabelOrientation.Horizontal,
                                     labelHeight = 2.5,
-                                    //fieldType = FieldTypeEnum.Table,
                                     columns = [
                                         new Table_ColumnSchema{
                                             width = 10.1
@@ -78,6 +80,11 @@ public class DocumentSchemaImplementation : IDocumentSchemaContract
                                                     extraStyles= "background-color: #F0F0F0;"
                                                 }
                                             ]
+                                        },
+                                        new Table_RowSchema {
+                                            index = 2,
+                                            height = 4.0,
+                                            cells = []
                                         }
                                     ]
                                 }
