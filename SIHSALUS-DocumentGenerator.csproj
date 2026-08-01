@@ -10,6 +10,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Include="..\..\HII1SC\Generador-de-FUA\src\utils\FUA_Mapping_Examples\FUA_Mapping_1.0.js" Link="Utils\MappingExamples\FUA_Mapping_1.0.js" />
     <None Include=".github\copilot-instructions.md" />
     <None Include="Utils\SchemaExamples\FUA_1.0.cs" />
     <None Include="Utils\MappingExamples\**\*.cs" />
@@ -31,13 +32,6 @@
 
   <ItemGroup>
     <Content Include="Utils\RenderUtils\**\*.css">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <CopyToPublishDirectory>Always</CopyToPublishDirectory>
-    </Content>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="mappingExamples\**\*.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <CopyToPublishDirectory>Always</CopyToPublishDirectory>
     </Content>
