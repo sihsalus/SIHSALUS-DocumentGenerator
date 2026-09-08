@@ -135,10 +135,10 @@ public class Fua_Mapping : IDocumentMappingContract
                                 },
                                 // TODO: cambiar con la locacion dinamica de location type
                                 // Visit Location Typr
-                                new TableMapping {
-                                    codeName = "Visit Location Type",
+                                //new TableMapping {
+                                //    codeName = "Visit Location Type",
 
-                                }
+                                //}
                             ]
                         }
                     ]

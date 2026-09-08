@@ -10,7 +10,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="..\..\HII1SC\Generador-de-FUA\src\utils\FUA_Mapping_Examples\FUA_Mapping_1.0.js" Link="Utils\MappingExamples\FUA_Mapping_1.0.js" />
     <None Include=".github\copilot-instructions.md" />
     <None Include="Utils\SchemaExamples\FUA_1.0.cs" />
     <None Include="Utils\MappingExamples\**\*.cs" />
@@ -54,6 +53,12 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+  </ItemGroup>
+
+
+
+  <ItemGroup>
+    <Folder Include="Utils\VisitExamples\" />
   </ItemGroup>
 
 </Project>

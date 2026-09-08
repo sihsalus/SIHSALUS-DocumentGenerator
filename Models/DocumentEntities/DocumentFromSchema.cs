@@ -1,5 +1,9 @@
-﻿using SIHSALUS_DocumentGenerator.Models.BaseEntities;
+﻿using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
+using SIHSALUS_DocumentGenerator.Models.BaseEntities;
+using SIHSALUS_DocumentGenerator.Models.DocumentEntities.DocumentRenderizationAbstractions;
 using System.ComponentModel.DataAnnotations;
+using System.Runtime.Loader;
 using System.Text.Json;
 
 namespace SIHSALUS_DocumentGenerator.Models.DocumentEntities;
@@ -13,7 +17,7 @@ public class DocumentFromSchema : BaseEntity
     [MaxLength(255)]
     public string Name { get; set; } = null!;
 
-    // Large JSONC text content — the form layout declaration
+    // Large .CS text content — the form layout declaration
     [Required]
     public string Content { get; set; } = null!;
 
@@ -84,10 +88,49 @@ public class DocumentFromSchema : BaseEntity
 
     public string RenderDocument()
     {
-        JsonDocument jsonDocument = JsonDocument.Parse(Content);
-        JsonElement contentJson = jsonDocument.RootElement;
+        SyntaxTree syntaxTree = CSharpSyntaxTree.ParseText(Content, path: $"{Name}.cs");
+        IEnumerable<MetadataReference> references = AppDomain.CurrentDomain
+            .GetAssemblies()
+            .Where(assembly => !assembly.IsDynamic && !string.IsNullOrWhiteSpace(assembly.Location))
+            .Select(assembly => MetadataReference.CreateFromFile(assembly.Location));
 
-        return "";
+        CSharpCompilation compilation = CSharpCompilation.Create(
+            assemblyName: $"DynamicSchema_{Guid.NewGuid():N}",
+            syntaxTrees: [syntaxTree],
+            references: references,
+            options: new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary));
+
+        using MemoryStream assemblyStream = new();
+        var emitResult = compilation.Emit(assemblyStream);
+
+        if (!emitResult.Success)
+        {
+            IEnumerable<string> diagnostics = emitResult.Diagnostics
+                .Where(diagnostic => diagnostic.Severity == DiagnosticSeverity.Error)
+                .Select(diagnostic => diagnostic.GetMessage());
+
+            throw new InvalidOperationException($"Schema compilation failed. {string.Join(" | ", diagnostics)}");
+        }
+
+        assemblyStream.Position = 0;
+        var schemaAssembly = AssemblyLoadContext.Default.LoadFromStream(assemblyStream);
+
+        Type? schemaType = schemaAssembly.GetTypes()
+            .FirstOrDefault(type => !type.IsAbstract && typeof(IDocumentSchemaContract).IsAssignableFrom(type));
+
+        if (schemaType is null)
+        {
+            throw new InvalidOperationException("No implementation of IDocumentSchemaContract was found.");
+        }
+
+        if (Activator.CreateInstance(schemaType) is not IDocumentSchemaContract schemaImplementation)
+        {
+            throw new InvalidOperationException("The schema implementation could not be created.");
+        }
+
+        DocumentSchema documentSchema = schemaImplementation.Create();
+
+        return documentSchema.Render(printLayout: false);
     }
 }
 

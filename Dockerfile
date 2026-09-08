@@ -1,5 +1,7 @@
 # See https://aka.ms/customizecontainer to learn how to customize your debug container and how Visual Studio uses this Dockerfile to build your images for faster debugging.
 
+
+
 # This stage is used when running from VS in fast mode (Default for Debug configuration)
 FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS base
 USER $APP_UID
@@ -8,6 +10,9 @@ ENV ASPNETCORE_HTTP_PORTS=8080
 ENV APP_PORT=8080
 ENV APP_MODE=PROD
 EXPOSE 8080
+
+# GitHub Package integration
+LABEL org.opencontainers.image.source=https://github.com/sihsalus/SIHSALUS-DocumentGenerator
 
 
 # This stage is used to build the service project
