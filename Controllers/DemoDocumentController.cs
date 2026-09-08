@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using SIHSALUS_DocumentGenerator.Models.DocumentEntities.DocumentRenderizationAbstractions;
+using System.Reflection;
 using System.Runtime.Loader;
 
 namespace SIHSALUS_DocumentGenerator.Controllers
@@ -20,7 +21,7 @@ namespace SIHSALUS_DocumentGenerator.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> GetByFileName(string fileName = "FUA_1.0")
+        public async Task<ActionResult> GetByFileName(string fileName = "FUA_1.0", bool debug = false)
         {
             if (!fileName.EndsWith(".cs", StringComparison.OrdinalIgnoreCase))
             {
@@ -37,6 +38,32 @@ namespace SIHSALUS_DocumentGenerator.Controllers
             if (!System.IO.File.Exists(filePath))
             {
                 return NotFound($"File not found: {safeFileName}");
+            }
+
+            if (debug)
+            {
+                if (!_environment.IsDevelopment())
+                {
+                    return Forbid();
+                }
+
+                var compiledSchemaType = typeof(DemoDocumentController).Assembly
+                    .GetTypes()
+                    .FirstOrDefault(type =>
+                        !type.IsAbstract &&
+                        typeof(IDocumentSchemaContract).IsAssignableFrom(type) &&
+                        string.Equals(
+                            type.GetCustomAttribute<SchemaFileAttribute>()?.FileName,
+                            safeFileName,
+                            StringComparison.OrdinalIgnoreCase));
+
+                if (compiledSchemaType is null)
+                {
+                    return NotFound($"No compiled schema is registered for: {safeFileName}");
+                }
+
+                var compiledSchema = (IDocumentSchemaContract)Activator.CreateInstance(compiledSchemaType)!;
+                return Content(compiledSchema.Create().Render(printLayout: false), "text/html");
             }
 
             var sourceCode = await System.IO.File.ReadAllTextAsync(filePath);

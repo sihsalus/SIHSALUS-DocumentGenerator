@@ -2,6 +2,7 @@ using SIHSALUS_DocumentGenerator.Models.DocumentEntities.DocumentRenderizationAb
 
 namespace SIHSALUS_DocumentGenerator.Utils.MappingExamples;
 
+[SchemaFile("FUA_test.cs")]
 public class FuaTestDocumentSchemaImplementation : IDocumentSchemaContract
 {
     public DocumentSchema Create()
