@@ -6,7 +6,7 @@ namespace SIHSALUS_DocumentGenerator.Utils.MappingExamples;
 public class FuaTestDocumentSchemaImplementation : IDocumentSchemaContract
 {
     public DocumentSchema Create()
-    {
+        {
         return new DocumentSchema
         {
             name = "Ficha Única de Atención",
