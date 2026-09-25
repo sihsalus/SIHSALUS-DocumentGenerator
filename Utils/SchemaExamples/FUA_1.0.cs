@@ -4,6 +4,7 @@ namespace SIHSALUS_DocumentGenerator.Utils.MappingExamples;
 
 // Friendly template for developers writing mapping scripts with typing support.
 // Contract: Roslyn loader should create an instance and call Create().
+[SchemaFile("FUA_1.0.cs")]
 public class DocumentSchemaImplementation : IDocumentSchemaContract
 {
     public DocumentSchema Create()

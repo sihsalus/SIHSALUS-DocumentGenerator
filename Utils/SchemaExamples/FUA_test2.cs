@@ -2,11 +2,18 @@ using SIHSALUS_DocumentGenerator.Models.DocumentEntities.DocumentRenderizationAb
 
 namespace SIHSALUS_DocumentGenerator.Utils.MappingExamples;
 
-[SchemaFile("FUA_test.cs")]
-public class FuaTestDocumentSchemaImplementation : IDocumentSchemaContract
+[SchemaFile("FUA_test2.cs")]
+public class FuaTest2DocumentSchemaImplementation : IDocumentSchemaContract
 {
     public DocumentSchema Create()
-        {
+    {
+        var document = CreateDocument();
+        SchemaDebug.Inspect(document);
+        return document;
+    }
+
+    private static DocumentSchema CreateDocument()
+    {
         return new DocumentSchema
         {
             name = "Ficha Única de Atención",
@@ -5279,4 +5286,67 @@ public class FuaTestDocumentSchemaImplementation : IDocumentSchemaContract
             ]
         };
     }
+
+
+    // Put breakpoints in the Inspect overloads below. They run once per node after
+    // creation, making it practical to inspect a named page, section, field, row, or cell.
+    private static class SchemaDebug
+    {
+        public static void Inspect(DocumentSchema document)
+        {
+            foreach (var page in document.pages ?? Enumerable.Empty<PageSchema>())
+            {
+                Inspect(page);
+            }
+        }
+
+        public static void Inspect(PageSchema page)
+        {
+            foreach (var section in page.sections ?? Enumerable.Empty<SectionSchema>())
+            {
+                Inspect(section);
+            }
+        }
+
+        public static void Inspect(SectionSchema section)
+        {
+            foreach (var field in section.fields)
+            {
+                Inspect(field);
+            }
+        }
+
+        public static void Inspect(BaseFieldSchema field)
+        {
+            if (field is FieldSchema group)
+            {
+                foreach (var nestedField in group.fields)
+                {
+                    Inspect(nestedField);
+                }
+            }
+
+            if (field is TableSchema table)
+            {
+                foreach (var row in table.rows)
+                {
+                    Inspect(row);
+                }
+            }
+        }
+
+        public static void Inspect(Table_RowSchema row)
+        {
+            foreach (var cell in row.cells ?? Enumerable.Empty<Table_CellSchema>())
+            {
+                Inspect(cell);
+            }
+        }
+
+        public static void Inspect(Table_CellSchema cell)
+        {
+        }
+    }
 }
+
+
