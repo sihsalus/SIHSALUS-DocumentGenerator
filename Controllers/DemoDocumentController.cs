@@ -121,11 +121,12 @@ public class DemoDocumentController : ControllerBase
                     .Where(diagnostic => diagnostic.Severity == DiagnosticSeverity.Error)
                     .Select(diagnostic => diagnostic.GetMessage());
 
-                return BadRequest(new { error = "Schema compilation failed.", diagnostics });
+                return (null, BadRequest(new { error = $"{kindLabel} compilation failed.", diagnostics }));
             }
 
-            // Reset the stream position and load the compiled assembly into the
-            // default AssemblyLoadContext so its types become available at runtime
+            // Reset the stream position and load the compiled assembly into a new
+            // collectible AssemblyLoadContext so it can be unloaded (and its memory
+            // reclaimed) once the caller is done using it.
             assemblyStream.Position = 0;
             // Loading from the memory stream avoids writing a temporary schema assembly to disk.
             var schemaAssembly = AssemblyLoadContext.Default.LoadFromStream(assemblyStream);

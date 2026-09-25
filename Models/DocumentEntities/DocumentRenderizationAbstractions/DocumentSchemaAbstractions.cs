@@ -1,4 +1,7 @@
-﻿using System.Globalization;
+﻿using Microsoft.AspNetCore.Mvc.RazorPages;
+using SIHSALUS_DocumentGenerator.Services;
+using System.Globalization;
+using System.Text.Json;
 using System.Text.RegularExpressions;
 using static SIHSALUS_DocumentGenerator.Models.DocumentEntities.DocumentRenderizationAbstractions.TableSchema;
 
@@ -23,11 +26,13 @@ public record Table_RowSchema
     public double height { get; set; }
     public List<Table_CellSchema>? cells { get; set; }
 
-    public string Render(int index, int colAmount, string prefix, Boolean printLayout)
+    public string Render(int index, int colAmount, string prefix, Boolean printLayout, List<TableFieldMapping>? mappings)
     {
         string htmlContent = string.Empty;
 
         if (colAmount == 0) return htmlContent;
+
+        
 
         // Row height
         string height = $"style=\"height: {this.height.ToString("F1")}mm;\"";
@@ -50,18 +55,27 @@ public record Table_RowSchema
                     </style>
                  """;
             }
-            // TODO: Text from mapping
+            string textFromMapping = "";
+            if(mappings is not null)
+            {
+                var aux = mappings.FirstOrDefault( (item) => item.row == index+1  && item.column == i+1 );
+                if (aux is not null) textFromMapping = aux?.valueToPut ?? "RARO";
+            }
+
+
+            string schemaText = printLayout ? (cell?.text ?? string.Empty) : string.Empty ;
+
             string auxCellContent = $$"""
                 {{extraStyles}}
-                 <td id="{{prefix}}-row-{{index}}-cell-{{i}}" class="field-border text-container {{(printLayout ? "format-related-print" : string.Empty)}}" > 
-                    {{cell?.text ?? string.Empty}} 
+                 <td id="{{prefix}}-row-{{index}}-cell-{{i}}" class="field-border text-container {{(printLayout ?  string.Empty : "format-related-noprint" )}}" > 
+                    {{schemaText}} {{textFromMapping}}
                 </td>
              """;
             rowContent.Add(auxCellContent);
         }
 
         htmlContent = $$"""
-            <tr {{height}} class="field-border {{(printLayout ? "format-related-print" : string.Empty)}}">
+            <tr {{height}} class="field-border {{(printLayout ? string.Empty : "format-related-noprint")}}">
                 {{(rowContent.Count > 0 ? string.Concat(rowContent) : string.Empty)}}
             </tr>
 
@@ -78,9 +92,12 @@ public record TableSchema : BaseFieldSchema
     public List<Table_RowSchema> rows { get; set; } = [];
     public Func<string>? extraProcessing { get; set; }
 
-    public override string Render(int fieldIndex, string prefix, bool printLayout, ref string logicAdditionalStyles, object? mapping)
+    public override string Render(int fieldIndex, string prefix, bool printLayout, ref string logicAdditionalStyles, FieldBaseMapping? mapping)
     {
         double auxWidthValue = 0.0;
+
+        //Parse FieldBaseMappin to TableMapping
+        TableMapping? tableMapping = mapping as TableMapping;
 
         // Define colgroups
         var auxColumns = columns
@@ -100,7 +117,8 @@ public record TableSchema : BaseFieldSchema
         var auxRows = this.rows.OrderBy(r => r.index);
 
         var finalRows = string.Concat(
-            auxRows.Select( (item, index) => item.Render( index, auxColumns.Count(), $"{prefix}-field-{fieldIndex}", printLayout ))
+            auxRows.Select( (item, index) => 
+                item.Render( index, auxColumns.Count(), $"{prefix}-field-{fieldIndex}", printLayout, tableMapping?.mappings ))
             );
 
         return colgroups + finalRows;
@@ -113,13 +131,21 @@ public record BoxSchema : BaseFieldSchema
     public string? value { get; set; }
     public Func<string>? extraProcessing { get; set; }
 
-    public override string Render(int fieldIndex, string prefix, bool printLayout, ref string logicAdditionalStyles, object? mapping)
+    public override string Render(int fieldIndex, string prefix, bool printLayout, ref string logicAdditionalStyles, FieldBaseMapping? mapping)
     {
-        var mappingValue = mapping?.ToString() ?? string.Empty; //TODO
+        BoxMapping? boxMapping = mapping as BoxMapping;
+        string mappingValue = "";
+        if ( boxMapping is not null)
+        {            
+            BoxFieldMapping boxFieldMapping = boxMapping.boxMapping; 
+
+            mappingValue = boxFieldMapping?.valueToPut ?? "";
+        }
+        string schemaValue = printLayout ? string.Empty : (this.value ?? string.Empty);
 
         string fieldContent = $$"""
             <tr>
-                <td class="text-container {{(printLayout ? "format-related-print" : string.Empty)}}">{{this.value ?? string.Empty}} {{mappingValue}}</td>
+                <td class="text-container {{(printLayout ? string.Empty : "format-related-noprint" )}}"> {{schemaValue}} {{mappingValue}}</td>
             </tr>
          """;
         logicAdditionalStyles += $$"""
@@ -134,24 +160,37 @@ public record BoxSchema : BaseFieldSchema
 public record FieldSchema : BaseFieldSchema
 {
     public required List<BaseFieldSchema> fields { get; set; } = [];
-    public override string Render(int fieldIndex, string prefix, bool printLayout, ref string logicAdditionalStyles, object? mapping)
+    public override string Render(int fieldIndex, string prefix, bool printLayout, ref string logicAdditionalStyles, FieldBaseMapping? mapping)
     {
         string fieldContent = string.Concat(
-            this.fields.Select( (field,index) => field.RenderContent(
-                fieldIndex: index, 
-                prefix: $"{prefix}-field-{fieldIndex}", 
-                printLayout: printLayout,
-                mapping: null
-            ) ) 
+            this.fields.Select((field, index) => {
+
+                FieldBaseMapping? fieldBaseMapping = null;
+                if (mapping is not null)
+                {
+                    FieldMapping? fieldMapping = mapping as FieldMapping;
+                    fieldBaseMapping = fieldMapping?.fields
+                    .FirstOrDefault(p => p.codeName == field.codeName);
+                }
+
+                return field.RenderContent(
+                    fieldIndex: index,
+                    prefix: $"{prefix}-field-{fieldIndex}",
+                    printLayout: printLayout,
+                    mapping: fieldBaseMapping
+                );
+            })
         );
         logicAdditionalStyles += $$"""
             width:  {{( this.width  is not null ? this.width.Value.ToString("F1")  : 200.ToString("F1") )}}mm; 
             height: {{( this.height is not null ? this.height.Value.ToString("F1") : 200.ToString("F1") )}}mm;  
          """;
 
+        // Parse FielBaseMapping to FieldMapping
+
         string finalFieldContent = $$"""
             <tr>
-               <td style="padding: 0px;" class="field-content {{( printLayout ? "format-related-print" : string.Empty )}}"> 
+               <td style="padding: 0px;" class="field-content {{( printLayout ? string.Empty : "format-related-noprint" )}}"> 
                    {{fieldContent}}
                </td>
            </tr>
@@ -253,7 +292,7 @@ public abstract record BaseFieldSchema
         return (captionStyle, flexDir);
     }
 
-    public abstract string Render(int fieldIndex, string prefix, bool printLayout, ref string logicAdditionalStyles, object? mapping);
+    public abstract string Render(int fieldIndex, string prefix, bool printLayout, ref string logicAdditionalStyles, FieldBaseMapping? mapping);
     private string getLabelPosition(LabelPosition? labelPosition)
     {
         string horizontalPos = string.Empty;
@@ -274,7 +313,7 @@ public abstract record BaseFieldSchema
                 ? $"{this.labelHeight.Value.ToString("F1")}mm;"
                 : "100%;";
 
-            verticalPos = $"height: {width}";
+            verticalPos = $"height: {height}";
         }
 
         return horizontalPos + verticalPos;
@@ -300,6 +339,14 @@ public abstract record BaseFieldSchema
 
     public (string labelContent, string flexDir) RenderLabel(string prefix,Boolean printLayout, int fieldIndex)
     {
+
+        /*
+        if (!printLayout)
+        {
+            return (string.Empty, string.Empty);
+        }
+        */
+
         string label = string.Empty;
         string flexDir = string.Empty;
 
@@ -318,11 +365,11 @@ public abstract record BaseFieldSchema
                     background-color: lightgray;
                     {{(this.labelHeight is not null ? ($"height: {this.labelHeight:F1}mm;") : string.Empty)}}
                     {{(this.labelHeight is not null ? ($"line-height: {this.labelHeight:F1}mm;") : string.Empty)}}
-                    {{(this.labelExtraStyles is not null ? (printLayout is false ? RemoveBackgroundColor(this.labelExtraStyles) : this.labelExtraStyles) : string.Empty)}}
+                    {{(this.labelExtraStyles is not null ? RemoveBackgroundColor(this.labelExtraStyles) : string.Empty)}}
                  }
              </style>
-             <div id="{{prefix}}-field-{{fieldIndex}}-caption" class="field-border text-container {{(printLayout ? "format-related-print" : string.Empty)}}">
-                 {{this.label}}
+             <div id="{{prefix}}-field-{{fieldIndex}}-caption" class="field-border text-container {{( printLayout ? String.Empty : "format-related-noprint" )}}">
+                 {{( printLayout && this.label is not null ? this.label : String.Empty )}}
              </div>
              """;
 
@@ -330,7 +377,7 @@ public abstract record BaseFieldSchema
         return (label, flexDir);
     }
 
-    public string RenderContent(int fieldIndex, string prefix, bool printLayout, object? mapping)
+    public string RenderContent(int fieldIndex, string prefix, bool printLayout, FieldBaseMapping? mapping)
     {
         string logicAdditionalStyles = String.Empty;
 
@@ -358,7 +405,7 @@ public abstract record BaseFieldSchema
             </style>
             <div id="{{prefix}}-field-{{fieldIndex}}" style="position: absolute; width: min-content; border: none; padding: 0; background: none; display: flex; {{containerStyleSuffix}};">
                 {{labelBefore}}
-                <table id="{{prefix}}-field-{{fieldIndex}}-content" class="table-field">
+                <table id="{{prefix}}-field-{{fieldIndex}}-content" class="table-field {{(printLayout ? String.Empty : "format-related-noprint")}}">
                     {{fieldContent}}
                 </table>
                 {{labelAfter}}
@@ -380,17 +427,19 @@ public record SectionSchema
     public string? extraStyles { get; set; }
     public List<BaseFieldSchema> fields { get; set; } = [];
 
-    public string Render(int sectionIndex, string prefix, Paddings paddings, Boolean printLayout)
+    public string Render(int sectionIndex, string prefix, Paddings paddings, Boolean printLayout, SectionMapping? sectionMapping)
     {
         string sectionContent = string.Empty;
 
         //Tile
         string title = string.Empty;
-        if(this.showTitle == true)
+        if(this.showTitle == true )
         {
             title = $$"""
                 <tr>
-                    <th class="section-header text-container {{(printLayout ? "format-related-print" : string.Empty)}}" style="height: {{this.titleHeight?.ToString("F1")}}mm;" > {{this.title ?? string.Empty}} </th>
+                    <th class="section-header text-container {{( printLayout ? String.Empty : "format-related-noprint")}}" style="height: {{this.titleHeight?.ToString("F1")}}mm;" > 
+                        {{ ( (this.title is not null && printLayout is true) ? this.title : string.Empty)}} 
+                    </th>
                 </tr>
              """;
         }
@@ -399,13 +448,22 @@ public record SectionSchema
         if(this.fields is not null)
         {
             string aux = string.Empty;
-            sectionContent = string.Join("", this.fields.Select((BaseFieldSchema item, int index) =>
-                item.RenderContent(
+            sectionContent = string.Join("", this.fields.Select((BaseFieldSchema baseField, int index) => {
+
+                Console.WriteLine("Section Match: ");
+                Console.WriteLine("FieldSchema: " + baseField.codeName);
+                FieldBaseMapping? fieldBaseMapping = sectionMapping?.fields
+                    .FirstOrDefault(p => p.codeName == baseField.codeName);
+
+                Console.WriteLine("FieldMapping: " + fieldBaseMapping?.codeName ?? "NULO");
+                Console.WriteLine("");
+
+                return baseField.RenderContent(
                     fieldIndex: index,
                     prefix: $"{prefix}-section-{sectionIndex.ToString()}",
                     printLayout: printLayout,
-                    mapping: null )
-            ));
+                    mapping: fieldBaseMapping);
+            }));
         }
 
         string htmlContent = $$"""
@@ -417,7 +475,7 @@ public record SectionSchema
                  {{this.extraStyles}}
              }
          </style>
-         <table id="{{prefix}}-section-{{sectionIndex.ToString()}}" class="table-section {{( printLayout ? "format-related-print" : string.Empty )}}" >                  
+         <table id="{{prefix}}-section-{{sectionIndex.ToString()}}" class="table-section {{( printLayout ? string.Empty : "format-related-noprint" )}}" >                  
              {{title}}    
              <tr style="height: {{this.bodyHeight.ToString("F1")}}mm;">                    
                  <td class="section-content">
@@ -437,29 +495,35 @@ public record PageSchema
     public double height { get; set; }
     public double width { get; set; }
     public string? extraStyles { get; set; }
-    public List<SectionSchema>? sections { get; set; }
+    public List<SectionSchema> sections { get; set; } = [];
 
-    public string Render(int index, Boolean printLayout, ref string pageSizes)
+    public string Render(int index, Boolean printLayout, ref string pageSizes, PageMapping? pageMapping)
     {
         string pageContent = string.Empty;
 
         //Check for sections
         if (this.sections is not null)
         {
-            // TODO: Add page padding fields to PageSchema and use their schema-defined values here.
+            
             Paddings auxPaddings = new Paddings
             {
                 padding_top = 10.0,
                 padding_left = 10.0
             };
 
-            pageContent = string.Join("", this.sections.Select((SectionSchema item, int localIndex) =>
-                item.Render(
+            pageContent = string.Join("", this.sections.Select((SectionSchema section, int localIndex) =>
+            { 
+                SectionMapping? sectionMapping = pageMapping?.sections
+                    .FirstOrDefault(p => p.codeName == section.codeName);
+
+                return section.Render(
                     sectionIndex: localIndex,
                     prefix: $"document-page-{index.ToString()}",
                     paddings: auxPaddings,
-                    printLayout: printLayout )
-            ));
+                    printLayout: printLayout,
+                    sectionMapping: sectionMapping
+                );
+            }));
         }
 
         //Process Page Size
@@ -480,7 +544,7 @@ public record PageSchema
         pageSizes += auxPageSize;
 
         string htmlContent = $$""" 
-            <div id="document-page-{{index.ToString()}}" class="document-page {{( printLayout ? "format-related-print" : string.Empty )}}" {{( this.extraStyles is not null ? $" style=\"{this.extraStyles}\"" : string.Empty )}}>
+            <div id="document-page-{{index.ToString()}}" class="document-page " {{( this.extraStyles is not null ? $" style=\"{this.extraStyles}\"" : string.Empty )}}>
                 {{ pageContent }}
             </div>
          """;
@@ -491,7 +555,7 @@ public record PageSchema
 
 public record DocumentSchema
 {
-    public List<PageSchema>? pages { get; set; }
+    public List<PageSchema> pages { get; set; } = [];
     public string name { get; set; } = string.Empty;
 
     private static string LoadDocumentPrevisualizationCss()
@@ -506,7 +570,7 @@ public record DocumentSchema
     }
 
     // Pending to add mapping
-    public string Render(Boolean printLayout)
+    public string Render(Boolean printLayout, DocumentMapping? docMapping)
     {
         string formatContent = string.Empty;
 
@@ -516,15 +580,21 @@ public record DocumentSchema
         // pageSizes variable to hold pages size and other properties
         string pageSizes = string.Empty;
 
-        //Validate pages
-        if(this.pages is not null)
+        // Render each page, applying its mapping when one is available
+        if (this.pages is not null)
         {
-            formatContent = string.Join("", this.pages.Select( (PageSchema item, int index) => 
-                item.Render(
-                    index:          index, 
-                    printLayout:    printLayout, 
-                    pageSizes:      ref pageSizes )
-            ) );
+            formatContent = string.Join("", this.pages.Select((PageSchema page, int index) =>
+            {
+                PageMapping? pageMapping = docMapping?.pages
+                    .FirstOrDefault(p => p.pageNumber == page.pageNumber);
+
+                return page.Render(
+                    index: index,
+                    printLayout: printLayout,
+                    pageSizes: ref pageSizes,
+                    pageMapping: pageMapping
+                );
+            }));
         }
 
         // Structure

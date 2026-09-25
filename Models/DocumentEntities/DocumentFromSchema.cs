@@ -130,7 +130,10 @@ public class DocumentFromSchema : BaseEntity
 
         DocumentSchema documentSchema = schemaImplementation.Create();
 
-        return documentSchema.Render(printLayout: false);
+        return documentSchema.Render(
+            true, 
+            null
+        );
     }
 }
 
