@@ -2,122 +2,173 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.Emit;
+using SIHSALUS_DocumentGenerator.Models.DocumentEntities;
 using SIHSALUS_DocumentGenerator.Models.DocumentEntities.DocumentRenderizationAbstractions;
 using SIHSALUS_DocumentGenerator.Services;
-using System.Reflection;
 using System.Runtime.Loader;
-using System.Text.Json;
 
-namespace SIHSALUS_DocumentGenerator.Controllers;
-
-[ApiController]
-[Route("api/[controller]")]
-[AllowAnonymous]
-public class DemoDocumentController : ControllerBase
+namespace SIHSALUS_DocumentGenerator.Controllers
 {
-    // Dynamic source files are compiled outside the project, so they do not inherit
-    // the SDK's implicit usings. Prefix the commonly required namespaces before parsing.
-    private const string DynamicSourceUsings = """
-        using System;
-        using System.Collections.Generic;
-        using System.Linq;
-
-        """;
-
-    private readonly IWebHostEnvironment _environment;
-
-    public DemoDocumentController(IWebHostEnvironment environment)
+    [ApiController]
+    [Route("api/[controller]")]
+    [AllowAnonymous]
+    public class DemoDocumentController : ControllerBase
     {
-        _environment = environment;
-    }
+        private readonly IWebHostEnvironment _environment;
 
-    /// <summary>
-    /// Renders a schema example. Supply both <paramref name="visitFile"/> and
-    /// <paramref name="mappingFile"/> to populate the schema from a visit payload.
-    /// </summary>
-    [HttpGet]
-    public async Task<ActionResult> GetByFileName(
-        string fileName = "FUA_1.0",
-        string? visitFile = null,
-        string? mappingFile = null,
-        bool debug = false )
-    {
-        // Normalize the schema extension, then require visit and mapper files as a pair:
-        // a mapper has no purpose without a payload, and a payload has no schema mapping.
-        if (!fileName.EndsWith(".cs", StringComparison.OrdinalIgnoreCase))
+        public DemoDocumentController(IWebHostEnvironment environment)
         {
-            fileName += ".cs";
+            _environment = environment;
         }
 
-        bool hasVisitFile = !string.IsNullOrWhiteSpace(visitFile);
-        bool hasMappingFile = !string.IsNullOrWhiteSpace(mappingFile);
-
-        if (hasVisitFile != hasMappingFile)
+        // GET api/demodocument?fileName=FUA_1.0
+        // When debug=false (default), dynamically compiles and renders a document schema (and, if
+        // provided, a mapping) from .cs files stored in Utils/SchemaExamples/ and Utils/MappingExamples/,
+        // so schema/mapping changes are reflected immediately without hard-coding file/class combinations.
+        // When debug=true, the schema/mapping are instead resolved by class name (fileName/mappingFile)
+        // from the assemblies already compiled into the running application, skipping Roslyn compilation.
+        [HttpGet]
+        public async Task<ActionResult> GetByFileName(
+            string fileName,
+            bool debug = false,
+            string? visitFile = null,
+            string? mappingFile = null,
+            Boolean? printLayout = true)
         {
-            return BadRequest(new { error = "visitFile and mappingFile must be supplied together." });
-        }
-
-        if (hasVisitFile && !visitFile!.EndsWith(".json", StringComparison.OrdinalIgnoreCase))
-        {
-            return BadRequest(new { error = "visitFile must be a .json file." });
-        }
-
-        if (hasMappingFile && !mappingFile!.EndsWith(".cs", StringComparison.OrdinalIgnoreCase))
-        {
-            return BadRequest(new { error = "mappingFile must be a .cs file." });
-        }
-
-        // Keep all file reads inside the examples folder, even when a caller sends a path.
-        string safeFileName = Path.GetFileName(fileName);
-        string schemaPath = Path.Combine(_environment.ContentRootPath, "Utils", "SchemaExamples", safeFileName);
-        if (!System.IO.File.Exists(schemaPath))
-        {
-            return NotFound($"Schema file not found: {safeFileName}");
-        }
-
-        DocumentSchema documentSchema;
-        if (debug)
-        {
-            // Development debugging uses the schema already compiled into the application.
-            // SchemaFileAttribute links that compiled type back to its source-file name.
-            if (!_environment.IsDevelopment())
+            // Case where either a mappingFile or visitFile are sent without each other
+            if ((mappingFile is null) != (visitFile is null))
             {
-                return Forbid();
+                return BadRequest("visitFile and mappingFile must both be provided together.");
             }
 
-            Type? compiledSchemaType = typeof(DemoDocumentController).Assembly
-                .GetTypes()
-                .FirstOrDefault(type =>
-                    !type.IsAbstract &&
-                    typeof(IDocumentSchemaContract).IsAssignableFrom(type) &&
-                    string.Equals(
-                        type.GetCustomAttribute<SchemaFileAttribute>()?.FileName,
-                        safeFileName,
-                        StringComparison.OrdinalIgnoreCase));
+            // Tracks every collectible AssemblyLoadContext created for this request so they
+            // can be unloaded once the HTML has been rendered, avoiding memory accumulation.
+            // Only populated when debug=false, since debug=true reuses already-loaded assemblies.
+            var loadContexts = new List<AssemblyLoadContext>();
 
-            if (compiledSchemaType is null ||
-                Activator.CreateInstance(compiledSchemaType) is not IDocumentSchemaContract compiledSchema)
+            try
             {
-                return NotFound($"No compiled schema is registered for: {safeFileName}");
+                var schemaResult = debug
+                    ? GetContractFromCompiledAssemblies<IDocumentSchemaContract>(fileName, "Schema")
+                    : await CompileFromFileAsync<IDocumentSchemaContract>(
+                        fileName,
+                        "SchemaExamples",
+                        "Schema",
+                        loadContexts);
+
+                if (schemaResult.ErrorResult is not null)
+                {
+                    return schemaResult.ErrorResult;
+                }
+
+                var documentSchema = schemaResult.Instance!.Create();
+
+                Models.DocumentEntities.DocumentRenderizationAbstractions.DocumentMapping documentMapping = null;
+
+                if (mappingFile is not null)
+                {
+                    var mappingResult = debug
+                        ? GetContractFromCompiledAssemblies<IDocumentMappingContract>(mappingFile, "Mapping")
+                        : await CompileFromFileAsync<IDocumentMappingContract>(
+                            mappingFile,
+                            "MappingExamples",
+                            "Mapping",
+                            loadContexts);
+
+                    if (mappingResult.ErrorResult is not null)
+                    {
+                        return mappingResult.ErrorResult;
+                    }
+
+                    var visitJson = await LoadVisitJson(visitFile);
+                    if (visitJson is null)
+                    {
+                        return NotFound($"Visit file not found: {visitFile}");
+                    }
+
+                    documentMapping = mappingResult.Instance!.Create();
+                    MappingService.importPayloadToMapping(visitJson, documentMapping, documentSchema);
+                }
+
+                string htmlResponse = documentSchema.Render(
+                    printLayout:    printLayout ?? true, 
+                    docMapping:     documentMapping
+                );
+
+                return Content(htmlResponse, "text/html");
+            }
+            finally
+            {
+                // Once the HTML has been produced, the dynamically compiled assemblies are no
+                // longer needed. Unload them so the runtime can reclaim the memory they used.
+                foreach (var context in loadContexts)
+                {
+                    context.Unload();
+                }
+            }
+        }
+
+        // Compiles a .cs file on disk with Roslyn, loads it into a dedicated collectible
+        // AssemblyLoadContext, locates the first concrete type implementing TContract and
+        // instantiates it. The load context is added to loadContexts so the caller can
+        // unload it once it is no longer needed, freeing the associated memory.
+        private async Task<(TContract? Instance, ActionResult? ErrorResult)> CompileFromFileAsync<TContract>(
+            string fileName,
+            string folderName,
+            string kindLabel,
+            List<AssemblyLoadContext> loadContexts)
+            where TContract : class
+        {
+            if (!fileName.EndsWith(".cs", StringComparison.OrdinalIgnoreCase))
+            {
+                fileName += ".cs";
             }
 
-            documentSchema = compiledSchema.Create();
-        }
-        else
-        {
-            // Normal mode reads the selected schema source, compiles it with Roslyn in memory,
-            // and creates the first class that implements the schema contract.
-            string sourceCode = await System.IO.File.ReadAllTextAsync(schemaPath);
-            SyntaxTree syntaxTree = ParseDynamicSource(sourceCode, schemaPath);
-            CSharpCompilation compilation = CreateCompilation($"DynamicSchema_{Guid.NewGuid():N}", syntaxTree);
+            // Sanitize the file name to prevent path traversal attacks,
+            // then resolve the full path inside the target examples directory.
+            var safeFileName = Path.GetFileName(fileName);
+            var filePath = Path.Combine(
+                _environment.ContentRootPath,
+                "Utils",
+                folderName,
+                safeFileName);
+
+            if (!System.IO.File.Exists(filePath))
+            {
+                return (null, NotFound($"{kindLabel} file not found: {safeFileName}"));
+            }
+
+            // Read the raw C# source code from the file on disk
+            var sourceCode = await System.IO.File.ReadAllTextAsync(filePath);
+
+            // Parse the source code into a Roslyn syntax tree
+            var syntaxTree = CSharpSyntaxTree.ParseText(sourceCode, path: filePath);
+
+            // Collect metadata references from all currently loaded assemblies so the
+            // dynamic compilation has access to the same types as the host application
+            var references = AppDomain.CurrentDomain
+                .GetAssemblies()
+                .Where(assembly => !assembly.IsDynamic && !string.IsNullOrWhiteSpace(assembly.Location))
+                .Select(assembly => MetadataReference.CreateFromFile(assembly.Location));
+
+            // Create a Roslyn in-memory compilation targeting a DLL output.
+            // A unique assembly name is used to avoid conflicts if the same file
+            // is loaded more than once during the application's lifetime.
+            var compilation = CSharpCompilation.Create(
+                assemblyName: $"Dynamic{kindLabel}_{Guid.NewGuid():N}",
+                syntaxTrees: [syntaxTree],
+                references: references,
+                options: new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary));
 
             // Emit the compiled IL into an in-memory stream instead of writing to disk
             await using var assemblyStream = new MemoryStream();
-            EmitResult emitResult = compilation.Emit(assemblyStream);
+            var emitResult = compilation.Emit(assemblyStream);
+
+            // If compilation produced errors, return them to the caller so the file
+            // author can diagnose and fix the source file
             if (!emitResult.Success)
             {
-                IEnumerable<string> diagnostics = emitResult.Diagnostics
+                var diagnostics = emitResult.Diagnostics
                     .Where(diagnostic => diagnostic.Severity == DiagnosticSeverity.Error)
                     .Select(diagnostic => diagnostic.GetMessage());
 
@@ -128,102 +179,85 @@ public class DemoDocumentController : ControllerBase
             // collectible AssemblyLoadContext so it can be unloaded (and its memory
             // reclaimed) once the caller is done using it.
             assemblyStream.Position = 0;
-            // Loading from the memory stream avoids writing a temporary schema assembly to disk.
-            var schemaAssembly = AssemblyLoadContext.Default.LoadFromStream(assemblyStream);
-            Type? schemaType = schemaAssembly.GetTypes()
-                .FirstOrDefault(type => !type.IsAbstract && typeof(IDocumentSchemaContract).IsAssignableFrom(type));
+            var assemblyLoadContext = new AssemblyLoadContext($"Dynamic{kindLabel}_{Guid.NewGuid():N}", isCollectible: true);
+            loadContexts.Add(assemblyLoadContext);
+            var loadedAssembly = assemblyLoadContext.LoadFromStream(assemblyStream);
 
-            if (schemaType is null ||
-                Activator.CreateInstance(schemaType) is not IDocumentSchemaContract schemaImplementation)
+            // Locate the first concrete type that implements TContract.
+            // Each file is expected to define exactly one such implementation.
+            var contractType = loadedAssembly.GetTypes()
+                .FirstOrDefault(type => !type.IsAbstract && typeof(TContract).IsAssignableFrom(type));
+
+            if (contractType is null)
             {
-                return BadRequest(new { error = "No schema implementation could be created." });
+                return (null, BadRequest(new { error = $"No implementation of {typeof(TContract).Name} was found." }));
             }
 
-            documentSchema = schemaImplementation.Create();
+            // Instantiate the contract using the default (parameterless) constructor
+            if (Activator.CreateInstance(contractType) is not TContract instance)
+            {
+                return (null, BadRequest(new { error = $"The {kindLabel.ToLowerInvariant()} implementation could not be created." }));
+            }
+
+            return (instance, null);
         }
 
-        if (hasVisitFile)
+        // Resolves a concrete implementation of TContract by matching its class name against
+        // types already loaded in the application's compiled (non-dynamic) assemblies. Used when
+        // debug=true to avoid recompiling a .cs file and instead reuse a type that already exists
+        // in the built application.
+        private (TContract? Instance, ActionResult? ErrorResult) GetContractFromCompiledAssemblies<TContract>(
+            string className,
+            string kindLabel)
+            where TContract : class
         {
-            // Resolve the optional payload and mapper from their dedicated example folders.
-            // Path.GetFileName prevents directory traversal outside ContentRootPath.
-            string safeVisitFile = Path.GetFileName(visitFile!);
-            string safeMappingFile = Path.GetFileName(mappingFile!);
-            string visitPath = Path.Combine(_environment.ContentRootPath, "Utils", "VisitExamples", safeVisitFile);
-            string mapperPath = Path.Combine(_environment.ContentRootPath, "Utils", "MappingExamples", safeMappingFile);
+            var contractType = AppDomain.CurrentDomain
+                .GetAssemblies()
+                .Where(assembly => !assembly.IsDynamic)
+                .SelectMany(assembly => assembly.GetTypes())
+                .FirstOrDefault(type =>
+                    !type.IsAbstract
+                    && typeof(TContract).IsAssignableFrom(type)
+                    && string.Equals(type.Name, className, StringComparison.OrdinalIgnoreCase));
+
+            if (contractType is null)
+            {
+                return (null, new NotFoundObjectResult(new { error = $"No compiled {kindLabel.ToLowerInvariant()} implementation named '{className}' was found." }));
+            }
+
+            if (Activator.CreateInstance(contractType) is not TContract instance)
+            {
+                return (null, new BadRequestObjectResult(new { error = $"The {kindLabel.ToLowerInvariant()} implementation could not be created." }));
+            }
+
+            return (instance, null);
+        }
+
+        private async Task<string?> LoadVisitJson(string? visitFile)
+        {
+            if (string.IsNullOrWhiteSpace(visitFile))
+            {
+                return null;
+            }
+
+            var safeVisitFile = Path.GetFileName(visitFile);
+            if (!safeVisitFile.EndsWith(".json", StringComparison.OrdinalIgnoreCase))
+            {
+                safeVisitFile += ".json";
+            }
+
+            var visitPath = Path.Combine(
+                _environment.ContentRootPath,
+                "Utils",
+                "VisitExamples",
+                safeVisitFile);
 
             if (!System.IO.File.Exists(visitPath))
             {
-                return NotFound($"Visit file not found: {safeVisitFile}");
+                return null;
             }
 
-            if (!System.IO.File.Exists(mapperPath))
-            {
-                return NotFound($"Mapping file not found: {safeMappingFile}");
-            }
-
-            // Mappers are compiled exactly like schemas, but must implement the mapping contract.
-            string mapperSource = await System.IO.File.ReadAllTextAsync(mapperPath);
-            SyntaxTree mapperSyntaxTree = ParseDynamicSource(mapperSource, mapperPath);
-            CSharpCompilation mapperCompilation = CreateCompilation($"DynamicMapping_{Guid.NewGuid():N}", mapperSyntaxTree);
-
-            await using var mapperAssemblyStream = new MemoryStream();
-            EmitResult mapperEmitResult = mapperCompilation.Emit(mapperAssemblyStream);
-            if (!mapperEmitResult.Success)
-            {
-                IEnumerable<string> diagnostics = mapperEmitResult.Diagnostics
-                    .Where(diagnostic => diagnostic.Severity == DiagnosticSeverity.Error)
-                    .Select(diagnostic => diagnostic.GetMessage());
-
-                return BadRequest(new { error = "Mapping compilation failed.", diagnostics });
-            }
-
-            mapperAssemblyStream.Position = 0;
-            var mapperAssembly = AssemblyLoadContext.Default.LoadFromStream(mapperAssemblyStream);
-            Type? mapperType = mapperAssembly.GetTypes()
-                .FirstOrDefault(type => !type.IsAbstract && typeof(IDocumentMappingContract).IsAssignableFrom(type));
-
-            if (mapperType is null ||
-                Activator.CreateInstance(mapperType) is not IDocumentMappingContract mapperImplementation)
-            {
-                return BadRequest(new { error = "No mapping implementation could be created." });
-            }
-
-            try
-            {
-                // The mapping service resolves JSON paths and writes the resulting values into
-                // matching schema boxes and table cells before the schema is rendered to HTML.
-                using JsonDocument visitDocument = JsonDocument.Parse(await System.IO.File.ReadAllTextAsync(visitPath));
-                MappingService.ApplyMappings(visitDocument.RootElement, mapperImplementation.Create(), documentSchema);
-            }
-            catch (JsonException)
-            {
-                return BadRequest(new { error = $"Visit file is not valid JSON: {safeVisitFile}" });
-            }
+            return await System.IO.File.ReadAllTextAsync(visitPath);
         }
-
-        // Render either the original schema or the populated schema as the demo response.
-        return Content(documentSchema.Render(printLayout: false), "text/html");
-    }
-
-    private static CSharpCompilation CreateCompilation(string assemblyName, SyntaxTree syntaxTree)
-    {
-        // Reuse loaded application/framework assemblies so dynamic scripts can reference
-        // DocumentSchema, DocumentMapping, and the rest of the application's public types.
-        IEnumerable<MetadataReference> references = AppDomain.CurrentDomain
-            .GetAssemblies()
-            .Where(assembly => !assembly.IsDynamic && !string.IsNullOrWhiteSpace(assembly.Location))
-            .Select(assembly => MetadataReference.CreateFromFile(assembly.Location));
-
-        return CSharpCompilation.Create(
-            assemblyName: assemblyName,
-            syntaxTrees: [syntaxTree],
-            references: references,
-            options: new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary));
-    }
-
-    private static SyntaxTree ParseDynamicSource(string sourceCode, string sourcePath)
-    {
-        // Preserve the original source path so compiler diagnostics point to the example file.
-        return CSharpSyntaxTree.ParseText(DynamicSourceUsings + sourceCode, path: sourcePath);
     }
 }
