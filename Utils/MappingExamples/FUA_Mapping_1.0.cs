@@ -80,14 +80,13 @@ public class Fua_Mapping : IDocumentMappingContract
                                 // Visit Time
                                 new BoxMapping {
                                     codeName = "Visit Time",
-                                    mappings = [
+                                    boxMapping = 
                                         new BoxFieldMapping {
                                             target = "payload.startDatetime",
                                             extraProcessing = (string value) => {
                                                 return OpenMRS_DateChecker (value, 11, 16);
                                             }
-                                        }
-                                    ]
+                                        }                                    
                                 },
                                 // IPRESS Info
                                 new TableMapping {
@@ -125,11 +124,10 @@ public class Fua_Mapping : IDocumentMappingContract
                                         // CODIGO DE LA OFERTA FLEXIBLE
                                         new BoxMapping {
                                             codeName = "Oferta Flexible Code",
-                                            mappings = [
+                                            boxMapping = 
                                                 new BoxFieldMapping {
                                                     value = "###"
-                                                }
-                                            ]
+                                                }                                            
                                         }
                                     ]
                                 },

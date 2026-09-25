@@ -15,7 +15,7 @@ public record BoxFieldMapping : BaseMapping { }
 
 public record BoxMapping : FieldBaseMapping
 {
-    public required List<BoxFieldMapping> mappings { get; set; } = [];
+    public required BoxFieldMapping boxMapping { get; set; }
 }
 
 public record TableFieldMapping : BaseMapping

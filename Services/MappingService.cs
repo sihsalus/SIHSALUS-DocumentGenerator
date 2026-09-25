@@ -1,7 +1,8 @@
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using SIHSALUS_DocumentGenerator.Models.DocumentEntities.DocumentRenderizationAbstractions;
 using System.Globalization;
 using System.Text.Json;
-using Microsoft.AspNetCore.Http;
-using SIHSALUS_DocumentGenerator.Models.DocumentEntities.DocumentRenderizationAbstractions;
 
 namespace SIHSALUS_DocumentGenerator.Services;
 
@@ -57,31 +58,64 @@ public class MappingService
         }
     }
 
-    public static void processFieldMapping(string JSONpayload, FieldBaseMapping field)
+    public static void processFieldMapping(string JSONpayload, BaseFieldSchema field, FieldBaseMapping fieldMapping)
     {
         // Check type of the field
-        if (field is TableMapping table)
+        if (fieldMapping is TableMapping table)
         {
             // use table.mappings
-            TableMapping tableField = field as TableMapping;
+            TableMapping tableField = table;
             // Iterate over mappings
             foreach (TableFieldMapping auxMapping in tableField.mappings)
             {
-                auxMapping.valueToPut = getValueByPath(
-                    JSONpayload: JSONpayload,
-                    path: auxMapping.target ?? ""
-                ).ToString();
+                auxMapping.valueToPut = ResolveMappingValue(JSONpayload, auxMapping);
             }
             
         }
-        else if (field is BoxMapping box)
+        else if (fieldMapping is BoxMapping box)
         {
-            // use box.mappings
+            BoxFieldMapping auxMapping = box.boxMapping;
+            
+            auxMapping.valueToPut = ResolveMappingValue(JSONpayload, auxMapping);
+            
         }
-        else if (field is FieldMapping group)
+        else if (fieldMapping is FieldMapping group)
         {
-            // use group.fields
+            foreach (FieldBaseMapping nestedField in group.fields)
+            {
+                processFieldMapping(JSONpayload, field, nestedField);
+            }
         }
+    }
+
+    private static string ResolveMappingValue(string JSONpayload, BaseMapping mapping)
+    {
+
+        // Select if the value is to be used or use the target with extraProcessing (if exist)
+        if (mapping.value is not null)
+        {
+            return mapping.value;
+        }
+        else if (mapping.target is not null)
+        {
+            JsonElement? targetResult = getValueByPath(
+                JSONpayload: JSONpayload,
+                path: mapping.target
+            );
+
+            if(mapping.extraProcessing is not null)
+            {
+                return mapping.extraProcessing(targetResult?.ToString() ?? "");
+            }
+            else
+            {
+                return targetResult?.ToString() ?? "";
+            }        
+
+        }        
+        
+        return "ERROR";
+
     }
     
     
@@ -96,14 +130,34 @@ public class MappingService
         using JsonDocument doc = JsonDocument.Parse(JSONpayload);
         JsonElement root = doc.RootElement;
 
-        // Iterate over the document
-        foreach (PageMapping page in mapping.pages)
+        // Iterate over the document schema
+        if (docSchema.pages is null) return;
+        if (mapping.pages.Count == 0) return;
+        foreach (PageSchema page in docSchema.pages)
         {
-            foreach(SectionMapping section in page.sections)
+            // Get PageMapping that shares the same codename as the current page schema, if any
+            PageMapping? pageMapping = mapping.pages.FirstOrDefault(p => p.pageNumber == page.pageNumber);
+
+            if (pageMapping is null) continue;
+            if (page.sections.Count == 0) continue;
+
+            foreach (SectionSchema section in page.sections)
             {
-                foreach(FieldBaseMapping field in section.fields)
+                // Get SectionMapping that shares the same codename as the current page schema, if any
+                SectionMapping? sectionMapping = pageMapping.sections.FirstOrDefault(p => p.codeName == section.codeName);
+
+                if (sectionMapping is null) continue;
+                if (section.fields.Count == 0) continue;
+
+                foreach (BaseFieldSchema field in section.fields)
                 {
-                    processFieldMapping(JSONpayload, field);
+                    // Get FieldMapping that shares the same codename as the current page schema, if any
+                    FieldBaseMapping? fieldMapping = sectionMapping.fields.FirstOrDefault((item) => item.codeName == field.codeName);
+
+                    if (fieldMapping is null) continue;
+
+                    processFieldMapping(JSONpayload, field, fieldMapping);
+                                      
                 }
             }
         }

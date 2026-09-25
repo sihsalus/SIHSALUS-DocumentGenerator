@@ -32,10 +32,10 @@ table {
     all: unset;
 }
 
-.format-related-print {
+.format-related-noprint {
     background-color: transparent !important;
-    border: transparent !important;
-    /*  color: transparent; */
+    border-color: blue !important;
+    /*color: transparent;*/
 }
 
 

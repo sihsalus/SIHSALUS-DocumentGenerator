@@ -9,7 +9,7 @@ namespace SIHSALUS_DocumentGenerator.Utils.MappingExamples;
 
 // C# translation of FUA_Mapping_1.0.js.
 // Contract: the Roslyn loader creates this class and calls Create().
-public class Fua_Mapping_Test : IDocumentMappingContract
+public class FUA_Mapping_Test : IDocumentMappingContract
 {
     private const string DniPrefix = "DNI =";
     private const string ClinicalHistoryPrefix = "N° Historia Clínica = ";
@@ -173,6 +173,18 @@ public class Fua_Mapping_Test : IDocumentMappingContract
                             codeName = "IPRESS Data",
                             fields =
                             [
+                                
+                                new FieldMapping {
+                                    codeName =  "Provider Type",
+                                    fields = [
+                                        new TableMapping {
+                                            codeName = "Provider Type",
+                                            mappings = [
+                                                new TableFieldMapping { value = "XXX", column = 2, row = 2 }
+                                            ]
+                                        }
+                                    ]
+                                },
                                 new TableMapping
                                 {
                                     codeName = "Visit Date",
@@ -186,7 +198,7 @@ public class Fua_Mapping_Test : IDocumentMappingContract
                                 new BoxMapping
                                 {
                                     codeName = "Visit Time",
-                                    mappings = [new BoxFieldMapping { target = "payload.startDatetime", extraProcessing = value => SliceOrEmpty(value, 11, 16) }]
+                                    boxMapping = new BoxFieldMapping { target = "payload.startDatetime", extraProcessing = value => SliceOrEmpty(value, 11, 16) }
                                 },
                                 new TableMapping
                                 {
@@ -210,7 +222,7 @@ public class Fua_Mapping_Test : IDocumentMappingContract
                                         new BoxMapping
                                         {
                                             codeName = "Oferta Flexible Code",
-                                            mappings = [new BoxFieldMapping { value = "###" }]
+                                            boxMapping = new BoxFieldMapping { value = "###" }
                                         }
                                     ]
                                 },
@@ -258,10 +270,10 @@ public class Fua_Mapping_Test : IDocumentMappingContract
                                         new TableFieldMapping { target = "payload.patient.identifiers", column = 2, row = 2, extraProcessing = value => IdentifierValue(value, DniPrefix, "7-") }
                                     ]
                                 },
-                                new BoxMapping { codeName = "Paternal Lastname", mappings = [new BoxFieldMapping { value = "???" }] },
-                                new BoxMapping { codeName = "Maternal Lastname", mappings = [new BoxFieldMapping { value = "???" }] },
-                                new BoxMapping { codeName = "Firstname", mappings = [new BoxFieldMapping { value = "???" }] },
-                                new BoxMapping { codeName = "Other names", mappings = [new BoxFieldMapping { value = "???" }] },
+                                new BoxMapping { codeName = "Paternal Lastname", boxMapping = new BoxFieldMapping { value = "???" } },
+                                new BoxMapping { codeName = "Maternal Lastname", boxMapping = new BoxFieldMapping { value = "???" } },
+                                new BoxMapping { codeName = "Firstname", boxMapping = new BoxFieldMapping { value = "???" } },
+                                new BoxMapping { codeName = "Other names", boxMapping = new BoxFieldMapping { value = "???" } },
                                 new TableMapping
                                 {
                                     codeName = "Patient Gender",
@@ -274,7 +286,7 @@ public class Fua_Mapping_Test : IDocumentMappingContract
                                 new BoxMapping
                                 {
                                     codeName = "CLINIC HISTORY NUMBER",
-                                    mappings = [new BoxFieldMapping { target = "payload.patient.identifiers", extraProcessing = value => IdentifierValue(value, ClinicalHistoryPrefix) }]
+                                    boxMapping = new BoxFieldMapping { target = "payload.patient.identifiers", extraProcessing = value => IdentifierValue(value, ClinicalHistoryPrefix) }
                                 }
                             ]
                         },

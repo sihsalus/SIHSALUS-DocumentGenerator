@@ -1,0 +1,1355 @@
+{
+  "results": [
+    {
+      "uuid": "192f9d24-a202-448f-a8aa-2968715d1d5c",
+      "location": {
+        "uuid": "35d2234e-129a-4c40-abb2-1ae0b2400002",
+        "display": "UPSS - HOSPITALIZACIÓN",
+        "name": "UPSS - HOSPITALIZACIÓN",
+        "description": "Unidad productora de servicios de salud de hospitalización del Hospital Santa Clotilde.",
+        "address1": null,
+        "address2": null,
+        "cityVillage": null,
+        "stateProvince": null,
+        "country": null,
+        "postalCode": null,
+        "latitude": null,
+        "longitude": null,
+        "countyDistrict": null,
+        "address3": null,
+        "address4": null,
+        "address5": null,
+        "address6": null,
+        "tags": [
+          {
+            "uuid": "36671c44-ce2d-47fb-b88e-bace6c85d801",
+            "display": "Visit Location",
+            "links": [
+              {
+                "rel": "self",
+                "uri": "https://gidis-hsc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/locationtag/36671c44-ce2d-47fb-b88e-bace6c85d801",
+                "resourceAlias": "locationtag"
+              }
+            ]
+          },
+          {
+            "uuid": "92010b50-8180-11f1-8a40-92e308d1ee8d",
+            "display": "Queue Location",
+            "links": [
+              {
+                "rel": "self",
+                "uri": "https://gidis-hsc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/locationtag/92010b50-8180-11f1-8a40-92e308d1ee8d",
+                "resourceAlias": "locationtag"
+              }
+            ]
+          },
+          {
+            "uuid": "9736bd4e-8180-11f1-8a40-92e308d1ee8d",
+            "display": "Appointment Location",
+            "links": [
+              {
+                "rel": "self",
+                "uri": "https://gidis-hsc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/locationtag/9736bd4e-8180-11f1-8a40-92e308d1ee8d",
+                "resourceAlias": "locationtag"
+              }
+            ]
+          },
+          {
+            "uuid": "f1fa0d61-ca3e-4cf1-a58b-b3458f7db1b3",
+            "display": "Care UPSS",
+            "links": [
+              {
+                "rel": "self",
+                "uri": "https://gidis-hsc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/locationtag/f1fa0d61-ca3e-4cf1-a58b-b3458f7db1b3",
+                "resourceAlias": "locationtag"
+              }
+            ]
+          }
+        ],
+        "parentLocation": {
+          "uuid": "35d2234e-129a-4c40-abb2-1ae0b72c1602",
+          "display": "Hospital Santa Clotilde",
+          "links": [
+            {
+              "rel": "self",
+              "uri": "https://gidis-hsc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/location/35d2234e-129a-4c40-abb2-1ae0b72c1602",
+              "resourceAlias": "location"
+            }
+          ]
+        },
+        "childLocations": [
+          {
+            "uuid": "465a6dd6-3285-4306-99e3-e35fd2c94ede",
+            "display": "Sala Infectología",
+            "links": [
+              {
+                "rel": "self",
+                "uri": "https://gidis-hsc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/location/465a6dd6-3285-4306-99e3-e35fd2c94ede",
+                "resourceAlias": "location"
+              }
+            ]
+          },
+          {
+            "uuid": "90e28b33-92b3-4b60-8364-f1e54f5444f4",
+            "display": "Sala Mujeres Adultas",
+            "links": [
+              {
+                "rel": "self",
+                "uri": "https://gidis-hsc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/location/90e28b33-92b3-4b60-8364-f1e54f5444f4",
+                "resourceAlias": "location"
+              }
+            ]
+          },
+          {
+            "uuid": "4f2931e8-e66c-49ec-a773-38587d2169b3",
+            "display": "Sala Neonatal",
+            "links": [
+              {
+                "rel": "self",
+                "uri": "https://gidis-hsc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/location/4f2931e8-e66c-49ec-a773-38587d2169b3",
+                "resourceAlias": "location"
+              }
+            ]
+          },
+          {
+            "uuid": "f8775df7-2ff9-443e-93ee-0fde6184db72",
+            "display": "Sala Pediátrica",
+            "links": [
+              {
+                "rel": "self",
+                "uri": "https://gidis-hsc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/location/f8775df7-2ff9-443e-93ee-0fde6184db72",
+                "resourceAlias": "location"
+              }
+            ]
+          },
+          {
+            "uuid": "c46622d7-f43a-4d70-b515-ae871cef08e1",
+            "display": "Sala Varones Adultos",
+            "links": [
+              {
+                "rel": "self",
+                "uri": "https://gidis-hsc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/location/c46622d7-f43a-4d70-b515-ae871cef08e1",
+                "resourceAlias": "location"
+              }
+            ]
+          }
+        ],
+        "retired": false,
+        "attributes": [],
+        "address7": null,
+        "address8": null,
+        "address9": null,
+        "address10": null,
+        "address11": null,
+        "address12": null,
+        "address13": null,
+        "address14": null,
+        "address15": null,
+        "links": [
+          {
+            "rel": "self",
+            "uri": "https://gidis-hsc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/location/35d2234e-129a-4c40-abb2-1ae0b2400002",
+            "resourceAlias": "location"
+          },
+          {
+            "rel": "full",
+            "uri": "https://gidis-hsc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/location/35d2234e-129a-4c40-abb2-1ae0b2400002?v=full",
+            "resourceAlias": "location"
+          }
+        ],
+        "resourceVersion": "2.0"
+      },
+      "encounters": [],
+      "visitType": {
+        "uuid": "b1f0e8a1-9c5d-4f0e-8892-81f3140fbc09",
+        "name": "Atención Ambulatoria",
+        "display": "Atención Ambulatoria",
+        "resourceVersion": "1.9"
+      },
+      "startDatetime": "2026-08-11T22:51:47.000+0000",
+      "stopDatetime": null,
+      "patient": {
+        "uuid": "cafc2128-546c-4f4d-ba91-33b1b15ec0f3",
+        "display": "100007G - Test Test  Test Test ",
+        "identifiers": [
+          {
+            "uuid": "0d7385ff-b0e7-4d3b-81fb-43131181d970",
+            "display": "N° Historia Clínica = 100007G",
+            "links": [
+              {
+                "rel": "self",
+                "uri": "https://gidis-hsc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/patient/cafc2128-546c-4f4d-ba91-33b1b15ec0f3/identifier/0d7385ff-b0e7-4d3b-81fb-43131181d970",
+                "resourceAlias": "identifier"
+              }
+            ]
+          },
+          {
+            "uuid": "929a2971-4f9b-4ef7-bf74-1b6302b59881",
+            "display": "DNI = 99999999",
+            "links": [
+              {
+                "rel": "self",
+                "uri": "https://gidis-hsc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/patient/cafc2128-546c-4f4d-ba91-33b1b15ec0f3/identifier/929a2971-4f9b-4ef7-bf74-1b6302b59881",
+                "resourceAlias": "identifier"
+              }
+            ]
+          }
+        ],
+        "person": {
+          "uuid": "cafc2128-546c-4f4d-ba91-33b1b15ec0f3",
+          "display": "Test Test  Test Test ",
+          "gender": "M",
+          "age": 27,
+          "birthdate": "1999-08-20T00:00:00.000+0000",
+          "birthdateEstimated": false,
+          "dead": false,
+          "deathDate": null,
+          "causeOfDeath": null,
+          "preferredName": {
+            "uuid": "4356bae3-012f-4ccf-b298-855e1b6c2fb6",
+            "display": "Test Test  Test Test ",
+            "links": [
+              {
+                "rel": "self",
+                "uri": "https://gidis-hsc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/person/cafc2128-546c-4f4d-ba91-33b1b15ec0f3/name/4356bae3-012f-4ccf-b298-855e1b6c2fb6",
+                "resourceAlias": "name"
+              }
+            ]
+          },
+          "preferredAddress": {
+            "uuid": "87a7eb1e-4e0e-48d2-8d87-551a699a1543",
+            "display": "LORETO",
+            "links": [
+              {
+                "rel": "self",
+                "uri": "https://gidis-hsc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/person/cafc2128-546c-4f4d-ba91-33b1b15ec0f3/address/87a7eb1e-4e0e-48d2-8d87-551a699a1543",
+                "resourceAlias": "address"
+              }
+            ]
+          },
+          "attributes": [
+            {
+              "uuid": "5703245e-1d00-4a2e-ab48-2340d31fb5b7",
+              "display": "Perú",
+              "links": [
+                {
+                  "rel": "self",
+                  "uri": "https://gidis-hsc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/person/cafc2128-546c-4f4d-ba91-33b1b15ec0f3/attribute/5703245e-1d00-4a2e-ab48-2340d31fb5b7",
+                  "resourceAlias": "attribute"
+                }
+              ]
+            }
+          ],
+          "voided": false,
+          "birthtime": null,
+          "deathdateEstimated": false,
+          "links": [
+            {
+              "rel": "self",
+              "uri": "https://gidis-hsc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/person/cafc2128-546c-4f4d-ba91-33b1b15ec0f3",
+              "resourceAlias": "person"
+            },
+            {
+              "rel": "full",
+              "uri": "https://gidis-hsc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/person/cafc2128-546c-4f4d-ba91-33b1b15ec0f3?v=full",
+              "resourceAlias": "person"
+            }
+          ],
+          "resourceVersion": "1.11"
+        },
+        "voided": false,
+        "links": [
+          {
+            "rel": "self",
+            "uri": "https://gidis-hsc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/patient/cafc2128-546c-4f4d-ba91-33b1b15ec0f3",
+            "resourceAlias": "patient"
+          },
+          {
+            "rel": "full",
+            "uri": "https://gidis-hsc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/patient/cafc2128-546c-4f4d-ba91-33b1b15ec0f3?v=full",
+            "resourceAlias": "patient"
+          }
+        ],
+        "resourceVersion": "1.8"
+      },
+      "attributes": [
+        {
+          "attributeType": {
+            "uuid": "9b640334-69e7-49a8-bc8d-1a379742f2f1",
+            "display": "Procedencia",
+            "links": [
+              {
+                "rel": "self",
+                "uri": "https://gidis-hsc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/visitattributetype/9b640334-69e7-49a8-bc8d-1a379742f2f1",
+                "resourceAlias": "visitattributetype"
+              }
+            ]
+          },
+          "display": "Procedencia: MAYNAS, PERU",
+          "uuid": "9ac0d8c7-1707-4f23-82d4-076769bab74f",
+          "value": "MAYNAS, PERU",
+          "resourceVersion": "1.9"
+        },
+        {
+          "attributeType": {
+            "uuid": "eb8b793b-f259-451d-9c09-53aa0ffd0d3f",
+            "display": "Token técnico de persistencia de consulta",
+            "links": [
+              {
+                "rel": "self",
+                "uri": "https://gidis-hsc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/visitattributetype/eb8b793b-f259-451d-9c09-53aa0ffd0d3f",
+                "resourceAlias": "visitattributetype"
+              }
+            ]
+          },
+          "display": "Token técnico de persistencia de consulta: 74430e7f-5f0c-4c8c-968f-b6ee32fdbd74",
+          "uuid": "57f96cd9-e931-433e-b72f-c3875ee29dd2",
+          "value": "74430e7f-5f0c-4c8c-968f-b6ee32fdbd74",
+          "resourceVersion": "1.9"
+        },
+        {
+          "attributeType": {
+            "uuid": "06a0b8c6-cbdf-4b42-9cbd-871129db8758",
+            "display": "Número de turno de cola",
+            "links": [
+              {
+                "rel": "self",
+                "uri": "https://gidis-hsc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/visitattributetype/06a0b8c6-cbdf-4b42-9cbd-871129db8758",
+                "resourceAlias": "visitattributetype"
+              }
+            ]
+          },
+          "display": "Número de turno de cola: COL-001",
+          "uuid": "0540a192-c9e6-4945-8abf-70a283c47f28",
+          "value": "COL-001",
+          "resourceVersion": "1.9"
+        }
+      ],
+      "resourceVersion": "1.9"
+    },
+    {
+      "uuid": "7ef861fa-1947-431d-b9dd-29015d641d35",
+      "location": {
+        "uuid": "35d2234e-129a-4c40-abb2-1ae0b2400001",
+        "display": "UPSS - CONSULTA EXTERNA",
+        "name": "UPSS - CONSULTA EXTERNA",
+        "description": "Unidad productora de servicios de salud de consulta externa del Hospital Santa Clotilde.",
+        "address1": null,
+        "address2": null,
+        "cityVillage": null,
+        "stateProvince": null,
+        "country": null,
+        "postalCode": null,
+        "latitude": null,
+        "longitude": null,
+        "countyDistrict": null,
+        "address3": null,
+        "address4": null,
+        "address5": null,
+        "address6": null,
+        "tags": [
+          {
+            "uuid": "36671c44-ce2d-47fb-b88e-bace6c85d801",
+            "display": "Visit Location",
+            "links": [
+              {
+                "rel": "self",
+                "uri": "https://gidis-hsc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/locationtag/36671c44-ce2d-47fb-b88e-bace6c85d801",
+                "resourceAlias": "locationtag"
+              }
+            ]
+          },
+          {
+            "uuid": "92010b50-8180-11f1-8a40-92e308d1ee8d",
+            "display": "Queue Location",
+            "links": [
+              {
+                "rel": "self",
+                "uri": "https://gidis-hsc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/locationtag/92010b50-8180-11f1-8a40-92e308d1ee8d",
+                "resourceAlias": "locationtag"
+              }
+            ]
+          },
+          {
+            "uuid": "9736bd4e-8180-11f1-8a40-92e308d1ee8d",
+            "display": "Appointment Location",
+            "links": [
+              {
+                "rel": "self",
+                "uri": "https://gidis-hsc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/locationtag/9736bd4e-8180-11f1-8a40-92e308d1ee8d",
+                "resourceAlias": "locationtag"
+              }
+            ]
+          },
+          {
+            "uuid": "f1fa0d61-ca3e-4cf1-a58b-b3458f7db1b3",
+            "display": "Care UPSS",
+            "links": [
+              {
+                "rel": "self",
+                "uri": "https://gidis-hsc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/locationtag/f1fa0d61-ca3e-4cf1-a58b-b3458f7db1b3",
+                "resourceAlias": "locationtag"
+              }
+            ]
+          }
+        ],
+        "parentLocation": {
+          "uuid": "35d2234e-129a-4c40-abb2-1ae0b72c1602",
+          "display": "Hospital Santa Clotilde",
+          "links": [
+            {
+              "rel": "self",
+              "uri": "https://gidis-hsc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/location/35d2234e-129a-4c40-abb2-1ae0b72c1602",
+              "resourceAlias": "location"
+            }
+          ]
+        },
+        "childLocations": [],
+        "retired": false,
+        "attributes": [],
+        "address7": null,
+        "address8": null,
+        "address9": null,
+        "address10": null,
+        "address11": null,
+        "address12": null,
+        "address13": null,
+        "address14": null,
+        "address15": null,
+        "links": [
+          {
+            "rel": "self",
+            "uri": "https://gidis-hsc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/location/35d2234e-129a-4c40-abb2-1ae0b2400001",
+            "resourceAlias": "location"
+          },
+          {
+            "rel": "full",
+            "uri": "https://gidis-hsc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/location/35d2234e-129a-4c40-abb2-1ae0b2400001?v=full",
+            "resourceAlias": "location"
+          }
+        ],
+        "resourceVersion": "2.0"
+      },
+      "encounters": [
+        {
+          "uuid": "6913531c-7b80-4724-b542-043a6ec75d4a",
+          "diagnoses": [
+            {
+              "uuid": "6196f1d3-0770-45d8-9f37-15d21bf8a5a9",
+              "display": "FRACTURA SUBTROCANTERIANA",
+              "certainty": "PROVISIONAL",
+              "rank": 1,
+              "diagnosis": {
+                "coded": {
+                  "uuid": "0327074b-c2b6-4f38-92db-f9048751f6a0",
+                  "display": "FRACTURA SUBTROCANTERIANA",
+                  "resourceVersion": "2.0"
+                }
+              },
+              "voided": false,
+              "resourceVersion": "1.8"
+            }
+          ],
+          "form": null,
+          "encounterDatetime": "2026-08-11T22:09:04.000+0000",
+          "orders": [],
+          "obs": [
+            {
+              "uuid": "a01742e7-ae3b-4431-bc4d-7f308cca1fbc",
+              "concept": {
+                "uuid": "2d53d39f-c93f-4128-8f7c-1bb45b498497",
+                "display": "Tipo de diagnóstico",
+                "conceptClass": {
+                  "uuid": "8d491a9a-c2cc-11de-8d13-0010c6dffd0f",
+                  "display": "Finding",
+                  "resourceVersion": "1.8"
+                },
+                "resourceVersion": "2.0"
+              },
+              "display": "Tipo de diagnóstico: Presuntivo",
+              "formFieldNamespace": "visit-notes",
+              "formFieldPath": "tipo-dx-0327074b-c2b6-4f38-92db-f9048751f6a0",
+              "groupMembers": null,
+              "value": {
+                "uuid": "4f59cf03-f888-4d34-a5dc-f24269b1945d",
+                "display": "Presuntivo",
+                "name": {
+                  "display": "Presuntivo",
+                  "uuid": "52d9a6b7-b744-4204-a101-7f6a906c4d1e",
+                  "name": "Presuntivo",
+                  "locale": "es",
+                  "localePreferred": true,
+                  "conceptNameType": "FULLY_SPECIFIED",
+                  "links": [
+                    {
+                      "rel": "self",
+                      "uri": "https://gidis-hsc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/4f59cf03-f888-4d34-a5dc-f24269b1945d/name/52d9a6b7-b744-4204-a101-7f6a906c4d1e",
+                      "resourceAlias": "name"
+                    },
+                    {
+                      "rel": "full",
+                      "uri": "https://gidis-hsc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/4f59cf03-f888-4d34-a5dc-f24269b1945d/name/52d9a6b7-b744-4204-a101-7f6a906c4d1e?v=full",
+                      "resourceAlias": "name"
+                    }
+                  ],
+                  "resourceVersion": "1.9"
+                },
+                "datatype": {
+                  "uuid": "8d4a4c94-c2cc-11de-8d13-0010c6dffd0f",
+                  "display": "N/A",
+                  "links": [
+                    {
+                      "rel": "self",
+                      "uri": "https://gidis-hsc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/conceptdatatype/8d4a4c94-c2cc-11de-8d13-0010c6dffd0f",
+                      "resourceAlias": "conceptdatatype"
+                    }
+                  ]
+                },
+                "conceptClass": {
+                  "uuid": "8d492774-c2cc-11de-8d13-0010c6dffd0f",
+                  "display": "Misc",
+                  "links": [
+                    {
+                      "rel": "self",
+                      "uri": "https://gidis-hsc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/conceptclass/8d492774-c2cc-11de-8d13-0010c6dffd0f",
+                      "resourceAlias": "conceptclass"
+                    }
+                  ]
+                },
+                "set": false,
+                "version": null,
+                "retired": false,
+                "names": [
+                  {
+                    "uuid": "52d9a6b7-b744-4204-a101-7f6a906c4d1e",
+                    "display": "Presuntivo",
+                    "links": [
+                      {
+                        "rel": "self",
+                        "uri": "https://gidis-hsc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/4f59cf03-f888-4d34-a5dc-f24269b1945d/name/52d9a6b7-b744-4204-a101-7f6a906c4d1e",
+                        "resourceAlias": "name"
+                      }
+                    ]
+                  }
+                ],
+                "descriptions": [],
+                "mappings": [],
+                "answers": [],
+                "setMembers": [],
+                "attributes": [],
+                "links": [
+                  {
+                    "rel": "self",
+                    "uri": "https://gidis-hsc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/4f59cf03-f888-4d34-a5dc-f24269b1945d",
+                    "resourceAlias": "concept"
+                  },
+                  {
+                    "rel": "full",
+                    "uri": "https://gidis-hsc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/4f59cf03-f888-4d34-a5dc-f24269b1945d?v=full",
+                    "resourceAlias": "concept"
+                  }
+                ],
+                "resourceVersion": "2.0"
+              },
+              "obsDatetime": "2026-08-11T22:09:04.000+0000",
+              "resourceVersion": "2.7"
+            },
+            {
+              "uuid": "7dfa1086-0a7b-4ce5-b505-5a01c23a4330",
+              "concept": {
+                "uuid": "34630b86-5106-4aea-8382-f55c02e4ba2c",
+                "display": "Código prestacional de la consulta SIH.SALUS",
+                "conceptClass": {
+                  "uuid": "8d491e50-c2cc-11de-8d13-0010c6dffd0f",
+                  "display": "Question",
+                  "resourceVersion": "1.8"
+                },
+                "resourceVersion": "2.0"
+              },
+              "display": "Código prestacional de la consulta SIH.SALUS: 056 - Consulta externa",
+              "formFieldNamespace": "visit-notes",
+              "formFieldPath": "codigo-prestacional",
+              "groupMembers": null,
+              "value": {
+                "uuid": "07e438c8-8e50-41f1-a6a5-9ec1e7d4f2f2",
+                "display": "056 - Consulta externa",
+                "name": {
+                  "display": "056 - Consulta externa",
+                  "uuid": "4d0ad4b7-e77c-4753-be74-5d195d920840",
+                  "name": "056 - Consulta externa",
+                  "locale": "es",
+                  "localePreferred": true,
+                  "conceptNameType": "FULLY_SPECIFIED",
+                  "links": [
+                    {
+                      "rel": "self",
+                      "uri": "https://gidis-hsc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/07e438c8-8e50-41f1-a6a5-9ec1e7d4f2f2/name/4d0ad4b7-e77c-4753-be74-5d195d920840",
+                      "resourceAlias": "name"
+                    },
+                    {
+                      "rel": "full",
+                      "uri": "https://gidis-hsc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/07e438c8-8e50-41f1-a6a5-9ec1e7d4f2f2/name/4d0ad4b7-e77c-4753-be74-5d195d920840?v=full",
+                      "resourceAlias": "name"
+                    }
+                  ],
+                  "resourceVersion": "1.9"
+                },
+                "datatype": {
+                  "uuid": "8d4a4c94-c2cc-11de-8d13-0010c6dffd0f",
+                  "display": "N/A",
+                  "links": [
+                    {
+                      "rel": "self",
+                      "uri": "https://gidis-hsc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/conceptdatatype/8d4a4c94-c2cc-11de-8d13-0010c6dffd0f",
+                      "resourceAlias": "conceptdatatype"
+                    }
+                  ]
+                },
+                "conceptClass": {
+                  "uuid": "8d492774-c2cc-11de-8d13-0010c6dffd0f",
+                  "display": "Misc",
+                  "links": [
+                    {
+                      "rel": "self",
+                      "uri": "https://gidis-hsc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/conceptclass/8d492774-c2cc-11de-8d13-0010c6dffd0f",
+                      "resourceAlias": "conceptclass"
+                    }
+                  ]
+                },
+                "set": false,
+                "version": null,
+                "retired": false,
+                "names": [
+                  {
+                    "uuid": "4d0ad4b7-e77c-4753-be74-5d195d920840",
+                    "display": "056 - Consulta externa",
+                    "links": [
+                      {
+                        "rel": "self",
+                        "uri": "https://gidis-hsc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/07e438c8-8e50-41f1-a6a5-9ec1e7d4f2f2/name/4d0ad4b7-e77c-4753-be74-5d195d920840",
+                        "resourceAlias": "name"
+                      }
+                    ]
+                  },
+                  {
+                    "uuid": "4653b5b0-e329-4a52-aa9a-49944da5e300",
+                    "display": "056",
+                    "links": [
+                      {
+                        "rel": "self",
+                        "uri": "https://gidis-hsc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/07e438c8-8e50-41f1-a6a5-9ec1e7d4f2f2/name/4653b5b0-e329-4a52-aa9a-49944da5e300",
+                        "resourceAlias": "name"
+                      }
+                    ]
+                  }
+                ],
+                "descriptions": [],
+                "mappings": [],
+                "answers": [],
+                "setMembers": [],
+                "attributes": [],
+                "links": [
+                  {
+                    "rel": "self",
+                    "uri": "https://gidis-hsc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/07e438c8-8e50-41f1-a6a5-9ec1e7d4f2f2",
+                    "resourceAlias": "concept"
+                  },
+                  {
+                    "rel": "full",
+                    "uri": "https://gidis-hsc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/07e438c8-8e50-41f1-a6a5-9ec1e7d4f2f2?v=full",
+                    "resourceAlias": "concept"
+                  }
+                ],
+                "resourceVersion": "2.0"
+              },
+              "obsDatetime": "2026-08-11T22:09:04.000+0000",
+              "resourceVersion": "2.7"
+            }
+          ],
+          "encounterType": {
+            "uuid": "d7151f82-c1f3-4152-a605-2f9ea7414a79",
+            "display": "Notas de Atención",
+            "viewPrivilege": null,
+            "editPrivilege": null,
+            "resourceVersion": "1.8"
+          },
+          "encounterProviders": [
+            {
+              "uuid": "8b6b8be9-a2a4-4b4e-8014-353192e86f23",
+              "display": "Consulta  Externa  : Médico Responsable",
+              "encounterRole": {
+                "uuid": "240b26f9-dd88-4172-823d-4a8bfeb7841f",
+                "display": "Médico Responsable",
+                "resourceVersion": "1.8"
+              },
+              "provider": {
+                "uuid": "884e0c29-f122-4536-8808-2ef40fc5b81d",
+                "person": {
+                  "uuid": "024431b4-364e-4765-967f-c02caee484b3",
+                  "display": "Consulta  Externa  ",
+                  "resourceVersion": "1.11"
+                },
+                "resourceVersion": "2.8"
+              },
+              "resourceVersion": "1.9"
+            }
+          ],
+          "resourceVersion": "2.2"
+        },
+        {
+          "uuid": "19a37685-74fe-4d3f-9ea6-42dbd47c42db",
+          "diagnoses": [],
+          "form": null,
+          "encounterDatetime": "2026-08-11T22:08:08.000+0000",
+          "orders": [],
+          "obs": [
+            {
+              "uuid": "7f76e603-e508-4e27-a915-00ed1e4912dd",
+              "concept": {
+                "uuid": "5085AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                "display": "Presión sistólica",
+                "conceptClass": {
+                  "uuid": "8d491a9a-c2cc-11de-8d13-0010c6dffd0f",
+                  "display": "Finding",
+                  "resourceVersion": "1.8"
+                },
+                "resourceVersion": "2.0"
+              },
+              "display": "Presión sistólica: 80",
+              "formFieldNamespace": null,
+              "formFieldPath": null,
+              "groupMembers": null,
+              "value": 80,
+              "obsDatetime": "2026-08-11T22:08:08.000+0000",
+              "resourceVersion": "2.7"
+            },
+            {
+              "uuid": "2a7175a3-3435-4993-97be-48903ddd6ff7",
+              "concept": {
+                "uuid": "5087AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                "display": "Frecuencia Cardíaca",
+                "conceptClass": {
+                  "uuid": "8d491a9a-c2cc-11de-8d13-0010c6dffd0f",
+                  "display": "Finding",
+                  "resourceVersion": "1.8"
+                },
+                "resourceVersion": "2.0"
+              },
+              "display": "Frecuencia Cardíaca: 99",
+              "formFieldNamespace": null,
+              "formFieldPath": null,
+              "groupMembers": null,
+              "value": 99,
+              "obsDatetime": "2026-08-11T22:08:08.000+0000",
+              "resourceVersion": "2.7"
+            },
+            {
+              "uuid": "91035c0e-8f2f-4c07-9005-30ccf75067ed",
+              "concept": {
+                "uuid": "5088AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                "display": "Temperatura (C°)",
+                "conceptClass": {
+                  "uuid": "8d491a9a-c2cc-11de-8d13-0010c6dffd0f",
+                  "display": "Finding",
+                  "resourceVersion": "1.8"
+                },
+                "resourceVersion": "2.0"
+              },
+              "display": "Temperatura (C°): 38,0",
+              "formFieldNamespace": null,
+              "formFieldPath": null,
+              "groupMembers": null,
+              "value": 38.0,
+              "obsDatetime": "2026-08-11T22:08:08.000+0000",
+              "resourceVersion": "2.7"
+            },
+            {
+              "uuid": "ef1f17ad-6607-4434-9406-423eac8bf850",
+              "concept": {
+                "uuid": "5086AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                "display": "Presión diastólica",
+                "conceptClass": {
+                  "uuid": "8d491a9a-c2cc-11de-8d13-0010c6dffd0f",
+                  "display": "Finding",
+                  "resourceVersion": "1.8"
+                },
+                "resourceVersion": "2.0"
+              },
+              "display": "Presión diastólica: 120",
+              "formFieldNamespace": null,
+              "formFieldPath": null,
+              "groupMembers": null,
+              "value": 120,
+              "obsDatetime": "2026-08-11T22:08:08.000+0000",
+              "resourceVersion": "2.7"
+            },
+            {
+              "uuid": "a277ceab-1d72-4808-ba38-98f191de1ef0",
+              "concept": {
+                "uuid": "5092AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                "display": "Saturación de oxígeno",
+                "conceptClass": {
+                  "uuid": "8d491e50-c2cc-11de-8d13-0010c6dffd0f",
+                  "display": "Question",
+                  "resourceVersion": "1.8"
+                },
+                "resourceVersion": "2.0"
+              },
+              "display": "Saturación de oxígeno: 95",
+              "formFieldNamespace": null,
+              "formFieldPath": null,
+              "groupMembers": null,
+              "value": 95,
+              "obsDatetime": "2026-08-11T22:08:08.000+0000",
+              "resourceVersion": "2.7"
+            },
+            {
+              "uuid": "baf2f858-1da7-4342-bf33-6c89f9be79ac",
+              "concept": {
+                "uuid": "5242AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                "display": "Frecuencia Respiratoria",
+                "conceptClass": {
+                  "uuid": "8d491e50-c2cc-11de-8d13-0010c6dffd0f",
+                  "display": "Question",
+                  "resourceVersion": "1.8"
+                },
+                "resourceVersion": "2.0"
+              },
+              "display": "Frecuencia Respiratoria: 99",
+              "formFieldNamespace": null,
+              "formFieldPath": null,
+              "groupMembers": null,
+              "value": 99,
+              "obsDatetime": "2026-08-11T22:08:08.000+0000",
+              "resourceVersion": "2.7"
+            }
+          ],
+          "encounterType": {
+            "uuid": "67a71486-1a54-468f-ac3e-7091a9a79584",
+            "display": "Triaje",
+            "viewPrivilege": null,
+            "editPrivilege": null,
+            "resourceVersion": "1.8"
+          },
+          "encounterProviders": [
+            {
+              "uuid": "148024e6-1974-4220-b4fa-0779839ab884",
+              "display": "Consulta  Externa  : Unknown",
+              "encounterRole": {
+                "uuid": "a0b03050-c99b-11e0-9572-0800200c9a66",
+                "display": "Unknown",
+                "resourceVersion": "1.8"
+              },
+              "provider": {
+                "uuid": "884e0c29-f122-4536-8808-2ef40fc5b81d",
+                "person": {
+                  "uuid": "024431b4-364e-4765-967f-c02caee484b3",
+                  "display": "Consulta  Externa  ",
+                  "resourceVersion": "1.11"
+                },
+                "resourceVersion": "2.8"
+              },
+              "resourceVersion": "1.9"
+            }
+          ],
+          "resourceVersion": "2.2"
+        }
+      ],
+      "visitType": {
+        "uuid": "b1f0e8a1-9c5d-4f0e-8892-81f3140fbc09",
+        "name": "Atención Ambulatoria",
+        "display": "Atención Ambulatoria",
+        "resourceVersion": "1.9"
+      },
+      "startDatetime": "2026-08-11T22:06:25.000+0000",
+      "stopDatetime": "2026-08-11T22:13:11.000+0000",
+      "patient": {
+        "uuid": "cafc2128-546c-4f4d-ba91-33b1b15ec0f3",
+        "display": "100007G - Test Test  Test Test ",
+        "identifiers": [
+          {
+            "uuid": "0d7385ff-b0e7-4d3b-81fb-43131181d970",
+            "display": "N° Historia Clínica = 100007G",
+            "links": [
+              {
+                "rel": "self",
+                "uri": "https://gidis-hsc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/patient/cafc2128-546c-4f4d-ba91-33b1b15ec0f3/identifier/0d7385ff-b0e7-4d3b-81fb-43131181d970",
+                "resourceAlias": "identifier"
+              }
+            ]
+          },
+          {
+            "uuid": "929a2971-4f9b-4ef7-bf74-1b6302b59881",
+            "display": "DNI = 99999999",
+            "links": [
+              {
+                "rel": "self",
+                "uri": "https://gidis-hsc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/patient/cafc2128-546c-4f4d-ba91-33b1b15ec0f3/identifier/929a2971-4f9b-4ef7-bf74-1b6302b59881",
+                "resourceAlias": "identifier"
+              }
+            ]
+          }
+        ],
+        "person": {
+          "uuid": "cafc2128-546c-4f4d-ba91-33b1b15ec0f3",
+          "display": "Test Test  Test Test ",
+          "gender": "M",
+          "age": 27,
+          "birthdate": "1999-08-20T00:00:00.000+0000",
+          "birthdateEstimated": false,
+          "dead": false,
+          "deathDate": null,
+          "causeOfDeath": null,
+          "preferredName": {
+            "uuid": "4356bae3-012f-4ccf-b298-855e1b6c2fb6",
+            "display": "Test Test  Test Test ",
+            "links": [
+              {
+                "rel": "self",
+                "uri": "https://gidis-hsc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/person/cafc2128-546c-4f4d-ba91-33b1b15ec0f3/name/4356bae3-012f-4ccf-b298-855e1b6c2fb6",
+                "resourceAlias": "name"
+              }
+            ]
+          },
+          "preferredAddress": {
+            "uuid": "87a7eb1e-4e0e-48d2-8d87-551a699a1543",
+            "display": "LORETO",
+            "links": [
+              {
+                "rel": "self",
+                "uri": "https://gidis-hsc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/person/cafc2128-546c-4f4d-ba91-33b1b15ec0f3/address/87a7eb1e-4e0e-48d2-8d87-551a699a1543",
+                "resourceAlias": "address"
+              }
+            ]
+          },
+          "attributes": [
+            {
+              "uuid": "5703245e-1d00-4a2e-ab48-2340d31fb5b7",
+              "display": "Perú",
+              "links": [
+                {
+                  "rel": "self",
+                  "uri": "https://gidis-hsc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/person/cafc2128-546c-4f4d-ba91-33b1b15ec0f3/attribute/5703245e-1d00-4a2e-ab48-2340d31fb5b7",
+                  "resourceAlias": "attribute"
+                }
+              ]
+            }
+          ],
+          "voided": false,
+          "birthtime": null,
+          "deathdateEstimated": false,
+          "links": [
+            {
+              "rel": "self",
+              "uri": "https://gidis-hsc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/person/cafc2128-546c-4f4d-ba91-33b1b15ec0f3",
+              "resourceAlias": "person"
+            },
+            {
+              "rel": "full",
+              "uri": "https://gidis-hsc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/person/cafc2128-546c-4f4d-ba91-33b1b15ec0f3?v=full",
+              "resourceAlias": "person"
+            }
+          ],
+          "resourceVersion": "1.11"
+        },
+        "voided": false,
+        "links": [
+          {
+            "rel": "self",
+            "uri": "https://gidis-hsc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/patient/cafc2128-546c-4f4d-ba91-33b1b15ec0f3",
+            "resourceAlias": "patient"
+          },
+          {
+            "rel": "full",
+            "uri": "https://gidis-hsc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/patient/cafc2128-546c-4f4d-ba91-33b1b15ec0f3?v=full",
+            "resourceAlias": "patient"
+          }
+        ],
+        "resourceVersion": "1.8"
+      },
+      "attributes": [
+        {
+          "attributeType": {
+            "uuid": "9b640334-69e7-49a8-bc8d-1a379742f2f1",
+            "display": "Procedencia",
+            "links": [
+              {
+                "rel": "self",
+                "uri": "https://gidis-hsc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/visitattributetype/9b640334-69e7-49a8-bc8d-1a379742f2f1",
+                "resourceAlias": "visitattributetype"
+              }
+            ]
+          },
+          "display": "Procedencia: MAYNAS, PERU",
+          "uuid": "7bb0a828-c02a-4815-be3d-69a3c25225cf",
+          "value": "MAYNAS, PERU",
+          "resourceVersion": "1.9"
+        },
+        {
+          "attributeType": {
+            "uuid": "5e13e902-2030-4f65-b9d5-9a4810c9a603",
+            "display": "Estado de Acreditación SIS",
+            "links": [
+              {
+                "rel": "self",
+                "uri": "https://gidis-hsc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/visitattributetype/5e13e902-2030-4f65-b9d5-9a4810c9a603",
+                "resourceAlias": "visitattributetype"
+              }
+            ]
+          },
+          "display": "Estado de Acreditación SIS: Concept #27394",
+          "uuid": "3ae17f37-e6b6-4250-a110-c8741982e7d2",
+          "value": {
+            "uuid": "9b3df0a1-0c58-4f55-9868-9c38f1db2051",
+            "display": "Acreditación vigente",
+            "name": {
+              "display": "Acreditación vigente",
+              "uuid": "02b39a5f-049c-470c-8f42-258b6f000b6a",
+              "name": "Acreditación vigente",
+              "locale": "es",
+              "localePreferred": true,
+              "conceptNameType": "FULLY_SPECIFIED",
+              "links": [
+                {
+                  "rel": "self",
+                  "uri": "https://gidis-hsc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/9b3df0a1-0c58-4f55-9868-9c38f1db2051/name/02b39a5f-049c-470c-8f42-258b6f000b6a",
+                  "resourceAlias": "name"
+                },
+                {
+                  "rel": "full",
+                  "uri": "https://gidis-hsc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/9b3df0a1-0c58-4f55-9868-9c38f1db2051/name/02b39a5f-049c-470c-8f42-258b6f000b6a?v=full",
+                  "resourceAlias": "name"
+                }
+              ],
+              "resourceVersion": "1.9"
+            },
+            "datatype": {
+              "uuid": "8d4a4c94-c2cc-11de-8d13-0010c6dffd0f",
+              "display": "N/A",
+              "links": [
+                {
+                  "rel": "self",
+                  "uri": "https://gidis-hsc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/conceptdatatype/8d4a4c94-c2cc-11de-8d13-0010c6dffd0f",
+                  "resourceAlias": "conceptdatatype"
+                }
+              ]
+            },
+            "conceptClass": {
+              "uuid": "8d492774-c2cc-11de-8d13-0010c6dffd0f",
+              "display": "Misc",
+              "links": [
+                {
+                  "rel": "self",
+                  "uri": "https://gidis-hsc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/conceptclass/8d492774-c2cc-11de-8d13-0010c6dffd0f",
+                  "resourceAlias": "conceptclass"
+                }
+              ]
+            },
+            "set": false,
+            "version": null,
+            "retired": false,
+            "names": [
+              {
+                "uuid": "8e9b099d-eb22-43ab-bd80-7f552825989c",
+                "display": "Current accreditation",
+                "links": [
+                  {
+                    "rel": "self",
+                    "uri": "https://gidis-hsc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/9b3df0a1-0c58-4f55-9868-9c38f1db2051/name/8e9b099d-eb22-43ab-bd80-7f552825989c",
+                    "resourceAlias": "name"
+                  }
+                ]
+              },
+              {
+                "uuid": "8d5b57a0-590c-4e6b-a46f-2440dd6a35b3",
+                "display": "Vigente",
+                "links": [
+                  {
+                    "rel": "self",
+                    "uri": "https://gidis-hsc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/9b3df0a1-0c58-4f55-9868-9c38f1db2051/name/8d5b57a0-590c-4e6b-a46f-2440dd6a35b3",
+                    "resourceAlias": "name"
+                  }
+                ]
+              },
+              {
+                "uuid": "f3cad2cf-88a0-428b-bfc7-32f2270c5dcd",
+                "display": "Vigente",
+                "links": [
+                  {
+                    "rel": "self",
+                    "uri": "https://gidis-hsc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/9b3df0a1-0c58-4f55-9868-9c38f1db2051/name/f3cad2cf-88a0-428b-bfc7-32f2270c5dcd",
+                    "resourceAlias": "name"
+                  }
+                ]
+              },
+              {
+                "uuid": "02b39a5f-049c-470c-8f42-258b6f000b6a",
+                "display": "Acreditación vigente",
+                "links": [
+                  {
+                    "rel": "self",
+                    "uri": "https://gidis-hsc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/9b3df0a1-0c58-4f55-9868-9c38f1db2051/name/02b39a5f-049c-470c-8f42-258b6f000b6a",
+                    "resourceAlias": "name"
+                  }
+                ]
+              }
+            ],
+            "descriptions": [],
+            "mappings": [],
+            "answers": [],
+            "setMembers": [],
+            "attributes": [],
+            "links": [
+              {
+                "rel": "self",
+                "uri": "https://gidis-hsc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/9b3df0a1-0c58-4f55-9868-9c38f1db2051",
+                "resourceAlias": "concept"
+              },
+              {
+                "rel": "full",
+                "uri": "https://gidis-hsc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/9b3df0a1-0c58-4f55-9868-9c38f1db2051?v=full",
+                "resourceAlias": "concept"
+              }
+            ],
+            "resourceVersion": "2.0"
+          },
+          "resourceVersion": "1.9"
+        },
+        {
+          "attributeType": {
+            "uuid": "193508ab-20c6-5291-9f23-0257335eaabd",
+            "display": "UUID de cita vinculada",
+            "links": [
+              {
+                "rel": "self",
+                "uri": "https://gidis-hsc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/visitattributetype/193508ab-20c6-5291-9f23-0257335eaabd",
+                "resourceAlias": "visitattributetype"
+              }
+            ]
+          },
+          "display": "UUID de cita vinculada: aa82ebc5-b8f4-4ffa-bde4-47d26e0ceea8",
+          "uuid": "a3f76e04-09b4-4cc7-8f97-839108a4d44f",
+          "value": "aa82ebc5-b8f4-4ffa-bde4-47d26e0ceea8",
+          "resourceVersion": "1.9"
+        },
+        {
+          "attributeType": {
+            "uuid": "3a988e33-a6c0-4b76-b924-01abb998944b",
+            "display": "Financiador",
+            "links": [
+              {
+                "rel": "self",
+                "uri": "https://gidis-hsc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/visitattributetype/3a988e33-a6c0-4b76-b924-01abb998944b",
+                "resourceAlias": "visitattributetype"
+              }
+            ]
+          },
+          "display": "Financiador: Concept #27390",
+          "uuid": "ecfb570c-3b54-4eee-bf8f-138787288a78",
+          "value": {
+            "uuid": "b76a9a24-4905-4132-a215-8a567281852a",
+            "display": "Plan de atención SIS",
+            "name": {
+              "display": "Plan de atención SIS",
+              "uuid": "ce17d84d-dffa-42cb-b452-de66513d2de7",
+              "name": "Plan de atención SIS",
+              "locale": "es",
+              "localePreferred": true,
+              "conceptNameType": "FULLY_SPECIFIED",
+              "links": [
+                {
+                  "rel": "self",
+                  "uri": "https://gidis-hsc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/b76a9a24-4905-4132-a215-8a567281852a/name/ce17d84d-dffa-42cb-b452-de66513d2de7",
+                  "resourceAlias": "name"
+                },
+                {
+                  "rel": "full",
+                  "uri": "https://gidis-hsc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/b76a9a24-4905-4132-a215-8a567281852a/name/ce17d84d-dffa-42cb-b452-de66513d2de7?v=full",
+                  "resourceAlias": "name"
+                }
+              ],
+              "resourceVersion": "1.9"
+            },
+            "datatype": {
+              "uuid": "8d4a48b6-c2cc-11de-8d13-0010c6dffd0f",
+              "display": "Coded",
+              "links": [
+                {
+                  "rel": "self",
+                  "uri": "https://gidis-hsc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/conceptdatatype/8d4a48b6-c2cc-11de-8d13-0010c6dffd0f",
+                  "resourceAlias": "conceptdatatype"
+                }
+              ]
+            },
+            "conceptClass": {
+              "uuid": "8d491e50-c2cc-11de-8d13-0010c6dffd0f",
+              "display": "Question",
+              "links": [
+                {
+                  "rel": "self",
+                  "uri": "https://gidis-hsc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/conceptclass/8d491e50-c2cc-11de-8d13-0010c6dffd0f",
+                  "resourceAlias": "conceptclass"
+                }
+              ]
+            },
+            "set": false,
+            "version": null,
+            "retired": false,
+            "names": [
+              {
+                "uuid": "ce17d84d-dffa-42cb-b452-de66513d2de7",
+                "display": "Plan de atención SIS",
+                "links": [
+                  {
+                    "rel": "self",
+                    "uri": "https://gidis-hsc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/b76a9a24-4905-4132-a215-8a567281852a/name/ce17d84d-dffa-42cb-b452-de66513d2de7",
+                    "resourceAlias": "name"
+                  }
+                ]
+              }
+            ],
+            "descriptions": [
+              {
+                "uuid": "13f6beea-ad65-4343-9e34-1eb33b3d9aab",
+                "display": "Plan de atención SIS registrado para la referencia o atención administrativa.",
+                "links": [
+                  {
+                    "rel": "self",
+                    "uri": "https://gidis-hsc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/b76a9a24-4905-4132-a215-8a567281852a/description/13f6beea-ad65-4343-9e34-1eb33b3d9aab",
+                    "resourceAlias": "description"
+                  }
+                ]
+              }
+            ],
+            "mappings": [
+              {
+                "uuid": "1dc64f86-b24c-5637-bfd7-c69cf5378297",
+                "display": "LOINC: 654-4",
+                "links": [
+                  {
+                    "rel": "self",
+                    "uri": "https://gidis-hsc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/b76a9a24-4905-4132-a215-8a567281852a/mapping/1dc64f86-b24c-5637-bfd7-c69cf5378297",
+                    "resourceAlias": "mapping"
+                  }
+                ]
+              },
+              {
+                "uuid": "5af32f47-38ff-5cf6-9cf4-94747e1f09ed",
+                "display": "SNOMED CT: 36878004",
+                "links": [
+                  {
+                    "rel": "self",
+                    "uri": "https://gidis-hsc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/b76a9a24-4905-4132-a215-8a567281852a/mapping/5af32f47-38ff-5cf6-9cf4-94747e1f09ed",
+                    "resourceAlias": "mapping"
+                  }
+                ]
+              },
+              {
+                "uuid": "0d266d36-9dc2-532c-b0aa-aada4ad869d7",
+                "display": "CIEL: 161448",
+                "links": [
+                  {
+                    "rel": "self",
+                    "uri": "https://gidis-hsc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/b76a9a24-4905-4132-a215-8a567281852a/mapping/0d266d36-9dc2-532c-b0aa-aada4ad869d7",
+                    "resourceAlias": "mapping"
+                  }
+                ]
+              }
+            ],
+            "answers": [
+              {
+                "uuid": "7ee9e92c-2aa5-4d19-89a1-9dcd9b1c8361",
+                "display": "B",
+                "links": [
+                  {
+                    "rel": "self",
+                    "uri": "https://gidis-hsc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/7ee9e92c-2aa5-4d19-89a1-9dcd9b1c8361",
+                    "resourceAlias": "concept"
+                  }
+                ]
+              },
+              {
+                "uuid": "75288aae-4cf7-426e-aa97-a5152e3d1cbb",
+                "display": "E",
+                "links": [
+                  {
+                    "rel": "self",
+                    "uri": "https://gidis-hsc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/75288aae-4cf7-426e-aa97-a5152e3d1cbb",
+                    "resourceAlias": "concept"
+                  }
+                ]
+              },
+              {
+                "uuid": "a663200e-648e-4dd5-99ec-3db9b2aeb910",
+                "display": "D",
+                "links": [
+                  {
+                    "rel": "self",
+                    "uri": "https://gidis-hsc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/a663200e-648e-4dd5-99ec-3db9b2aeb910",
+                    "resourceAlias": "concept"
+                  }
+                ]
+              },
+              {
+                "uuid": "e1785011-8628-5dbf-a8b8-8d490d3f47ed",
+                "display": "Plan SIS A",
+                "links": [
+                  {
+                    "rel": "self",
+                    "uri": "https://gidis-hsc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/e1785011-8628-5dbf-a8b8-8d490d3f47ed",
+                    "resourceAlias": "concept"
+                  }
+                ]
+              },
+              {
+                "uuid": "bd5629af-ae7c-42ee-8962-8b40468143aa",
+                "display": "C",
+                "links": [
+                  {
+                    "rel": "self",
+                    "uri": "https://gidis-hsc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/bd5629af-ae7c-42ee-8962-8b40468143aa",
+                    "resourceAlias": "concept"
+                  }
+                ]
+              }
+            ],
+            "setMembers": [],
+            "attributes": [],
+            "links": [
+              {
+                "rel": "self",
+                "uri": "https://gidis-hsc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/b76a9a24-4905-4132-a215-8a567281852a",
+                "resourceAlias": "concept"
+              },
+              {
+                "rel": "full",
+                "uri": "https://gidis-hsc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/b76a9a24-4905-4132-a215-8a567281852a?v=full",
+                "resourceAlias": "concept"
+              }
+            ],
+            "resourceVersion": "2.0"
+          },
+          "resourceVersion": "1.9"
+        },
+        {
+          "attributeType": {
+            "uuid": "06a0b8c6-cbdf-4b42-9cbd-871129db8758",
+            "display": "Número de turno de cola",
+            "links": [
+              {
+                "rel": "self",
+                "uri": "https://gidis-hsc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/visitattributetype/06a0b8c6-cbdf-4b42-9cbd-871129db8758",
+                "resourceAlias": "visitattributetype"
+              }
+            ]
+          },
+          "display": "Número de turno de cola: COL-001",
+          "uuid": "51522037-54a1-4b4c-b329-b96474ba0075",
+          "value": "COL-001",
+          "resourceVersion": "1.9"
+        }
+      ],
+      "resourceVersion": "1.9"
+    }
+  ]
+}
