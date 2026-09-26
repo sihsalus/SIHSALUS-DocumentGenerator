@@ -559,7 +559,7 @@ public record PageSchema
         pageSizes += auxPageSize;
 
         string htmlContent = $$""" 
-            <div id="document-page-{{index.ToString()}}" class="document-page " {{( this.extraStyles is not null ? $" style=\"{this.extraStyles}\"" : string.Empty )}}>
+            <div id="document-page-{{index.ToString()}}" class="document-page {{(printLayout ? String.Empty : "format-related-noprint")}} " {{( this.extraStyles is not null ? $" style=\"{this.extraStyles}\"" : string.Empty )}}>
                 {{ pageContent }}
             </div>
          """;
@@ -575,13 +575,34 @@ public record DocumentSchema
 
     private static string LoadDocumentPrevisualizationCss()
     {
-        var cssPath = Path.Combine(
-            AppContext.BaseDirectory,
-            "Utils",
-            "RenderUtils",
-            "DocumentPrevisualization.css");
+        string? configuredRoot = Environment.GetEnvironmentVariable("DOCUMENT_CONTENT_ROOT");
+        string projectRootFromBase = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..", "..", "..", ".."));
 
-        return File.Exists(cssPath) ? File.ReadAllText(cssPath) : string.Empty;
+        string[] candidateRoots =
+        [
+            configuredRoot ?? string.Empty,
+            Directory.GetCurrentDirectory(),
+            projectRootFromBase,
+            AppContext.BaseDirectory
+        ];
+
+        foreach (string root in candidateRoots)
+        {
+            if (string.IsNullOrWhiteSpace(root))
+            {
+                continue;
+            }
+
+            string cssPath = Path.Combine(root, "Utils", "RenderUtils", "DocumentPrevisualization.css");
+            if (File.Exists(cssPath))
+            {
+                Console.WriteLine($"[DocumentSchema] Loading CSS from: {cssPath}");
+                return File.ReadAllText(cssPath);
+            }
+        }
+
+        Console.WriteLine("[DocumentSchema] DocumentPrevisualization.css was not found in any candidate root.");
+        return string.Empty;
     }
 
     // Pending to add mapping

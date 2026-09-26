@@ -34,7 +34,8 @@ table {
 
 .format-related-noprint {
     background-color: transparent !important;
-    border-color: blue !important;
+    border-color: transparent !important;
+    box-shadow: none !important;
     /*color: transparent;*/
 }
 
