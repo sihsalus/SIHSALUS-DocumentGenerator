@@ -48,9 +48,8 @@ public record Table_RowSchema
             {
                 extraStyles = $$"""
                     <style>
-                        #{{prefix}}-row-{{index.ToString()}}-cell-{{i}} {
-                            {{cell.extraStyles ?? string.Empty}},
-                            min-width: 0;
+                        #{{prefix}}-row-{{index.ToString()}}-cell-{{i}}-content {
+                            {{cell.extraStyles ?? string.Empty}};
                         }
                     </style>
                  """;
@@ -67,8 +66,10 @@ public record Table_RowSchema
 
             string auxCellContent = $$"""
                 {{extraStyles}}
-                 <td id="{{prefix}}-row-{{index}}-cell-{{i}}" class="field-border text-container {{(printLayout ?  string.Empty : "format-related-noprint" )}}" > 
-                    {{schemaText}} {{textFromMapping}}
+                 <td id="{{prefix}}-row-{{index}}-cell-{{i}}" class="field-border {{(printLayout ?  string.Empty : "format-related-noprint" )}}" style="padding: 0; overflow: hidden; box-sizing: border-box; position: relative;">
+                    <div id="{{prefix}}-row-{{index}}-cell-{{i}}-content" class="table-cell-content text-container {{(printLayout ? string.Empty : "format-related-noprint")}}">
+                        {{schemaText}} {{textFromMapping}}
+                    </div>
                 </td>
              """;
             rowContent.Add(auxCellContent);
@@ -363,6 +364,10 @@ public abstract record BaseFieldSchema
 
                     font-weight: bold;
                     background-color: lightgray;
+                    overflow: hidden;
+                    box-sizing: border-box;
+                    max-width: 100%;
+                    max-height: 100%;
                     {{(this.labelHeight is not null ? ($"height: {this.labelHeight:F1}mm;") : string.Empty)}}
                     {{(this.labelHeight is not null ? ($"line-height: {this.labelHeight:F1}mm;") : string.Empty)}}
                     {{(this.labelExtraStyles is not null ? RemoveBackgroundColor(this.labelExtraStyles) : string.Empty)}}
@@ -385,9 +390,19 @@ public abstract record BaseFieldSchema
         var (labelContent, flexDir) = RenderLabel(prefix, printLayout, fieldIndex);
 
 
-        var containerStyleSuffix = flexDir is not null
-            ? $"flex-direction: {flexDir}; position: absolute;"
+        var containerStyleSuffix = !string.IsNullOrWhiteSpace(flexDir)
+            ? $"flex-direction: {flexDir};"
             : string.Empty;
+
+        string containerDimensions = string.Empty;
+        if (this.width is not null)
+        {
+            containerDimensions += $"width: {this.width.Value:F1}mm; ";
+        }
+        if (this.height is not null)
+        {
+            containerDimensions += $"height: {this.height.Value:F1}mm; ";
+        }
 
         string labelBefore = this.labelPosition is LabelPosition.Top or LabelPosition.Left ? labelContent : string.Empty;
         string labelAfter = this.labelPosition is LabelPosition.Bottom or LabelPosition.Right ? labelContent : string.Empty;
@@ -403,7 +418,7 @@ public abstract record BaseFieldSchema
                     {{logicAdditionalStyles}}
                 }
             </style>
-            <div id="{{prefix}}-field-{{fieldIndex}}" style="position: absolute; width: min-content; border: none; padding: 0; background: none; display: flex; {{containerStyleSuffix}};">
+            <div id="{{prefix}}-field-{{fieldIndex}}" style="position: absolute; {{containerDimensions}}border: none; padding: 0; background: none; display: flex; overflow: hidden; box-sizing: border-box; min-width: 0; min-height: 0; {{containerStyleSuffix}}">
                 {{labelBefore}}
                 <table id="{{prefix}}-field-{{fieldIndex}}-content" class="table-field {{(printLayout ? String.Empty : "format-related-noprint")}}">
                     {{fieldContent}}
