@@ -2,9 +2,11 @@
 
 
 
-# This stage is used when running from VS in fast mode (Default for Debug configuration)
-FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS base
-USER $APP_UID
+# This image includes the Chromium binary and Linux dependencies required by
+# Microsoft.Playwright 1.63.0, which is used by RenderService.
+FROM mcr.microsoft.com/playwright/dotnet:v1.63.0-noble AS base
+# Keep Chromium sandboxed while rendering untrusted HTML.
+USER pwuser
 WORKDIR /app
 ENV ASPNETCORE_HTTP_PORTS=3000
 ENV APP_PORT=3000
@@ -32,6 +34,10 @@ RUN dotnet publish "./SIHSALUS-DocumentGenerator.csproj" -c $BUILD_CONFIGURATION
 
 # This stage is used in production or when running from VS in regular mode (Default when not using the Debug configuration)
 FROM base AS final
+USER root
 WORKDIR /app
 COPY --from=publish /app/publish .
+RUN chown -R pwuser:pwuser /app \
+    && chmod +x /app/.playwright/node/linux-x64/node
+USER pwuser
 ENTRYPOINT ["dotnet", "SIHSALUS-DocumentGenerator.dll"]
