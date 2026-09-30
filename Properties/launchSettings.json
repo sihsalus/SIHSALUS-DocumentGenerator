@@ -14,15 +14,7 @@
       "environmentVariables": {
         "DOCUMENT_CONTENT_ROOT": "/app",
         "ASPNETCORE_HTTP_PORTS": "3000",
-        "APP_PORT": "3000",
-        "APP_MODE": "DEV",
-        "SECURITY_TOKEN": "soyuntokenxd",
-        "ENCRYPTION_KEY": "123456789012",
-        "DB_HOST": "host.docker.internal",
-        "DB_PORT": "5432",
-        "DB_NAME": "fuagenerator",
-        "DB_USER": "fuagenerator",
-        "DB_PASSWORD": "fuagenerator"
+        "APP_PORT": "3000"
       },
       "httpPort": 3000,
       "publishAllPorts": false,

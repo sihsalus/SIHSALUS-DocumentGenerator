@@ -6,10 +6,10 @@
 FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS base
 USER $APP_UID
 WORKDIR /app
-ENV ASPNETCORE_HTTP_PORTS=8080
-ENV APP_PORT=8080
-ENV APP_MODE=PROD
-EXPOSE 8080
+ENV ASPNETCORE_HTTP_PORTS=3000
+ENV APP_PORT=3000
+ENV APP_MODE=DEV
+EXPOSE 3000
 
 # GitHub Package integration
 LABEL org.opencontainers.image.source=https://github.com/sihsalus/SIHSALUS-DocumentGenerator

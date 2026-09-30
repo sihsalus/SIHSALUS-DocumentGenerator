@@ -158,6 +158,7 @@ public class FUA_Mapping_Test : IDocumentMappingContract
 
     public DocumentMapping Create()
     {
+        int a = 8;
         return new DocumentMapping
         {
             name = "Ficha Única de Atención",

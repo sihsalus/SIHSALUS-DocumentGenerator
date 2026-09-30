@@ -7,7 +7,7 @@ SetAspNetCoreEnvironmentFromAppMode();
 
 var builder = WebApplication.CreateBuilder(args);
 
-var appPort = GetEnvironmentVariableOrDefault("APP_PORT", GetFirstHttpPortFromAspNetCoreHttpPorts() ?? "8080");
+var appPort = GetEnvironmentVariableOrDefault("APP_PORT", GetFirstHttpPortFromAspNetCoreHttpPorts() ?? "3000");
 var appMode = GetEnvironmentVariableOrDefault("APP_MODE", "DEV");
 var encryptionKey = GetRequiredEnvironmentVariable("ENCRYPTION_KEY");
 var securityToken = GetRequiredEnvironmentVariable("SECURITY_TOKEN");

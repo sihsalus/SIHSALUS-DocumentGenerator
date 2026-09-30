@@ -11,8 +11,6 @@
 
   <ItemGroup>
     <None Include=".github\copilot-instructions.md" />
-    <None Include="Utils\SchemaExamples\FUA_1.0.cs" />
-    <None Include="Utils\MappingExamples\**\*.cs" />
   </ItemGroup>
 
   <ItemGroup>

@@ -30,9 +30,10 @@ namespace SIHSALUS_DocumentGenerator.Controllers
         [HttpGet]
         public async Task<ActionResult> GetByFileName(
             string fileName,
-            bool debug = false,
+            bool debugSchema = false,
             string? visitFile = null,
             string? mappingFile = null,
+            bool debugMapping = false,
             Boolean? printLayout = true)
         {
             // Case where either a mappingFile or visitFile are sent without each other
@@ -48,7 +49,7 @@ namespace SIHSALUS_DocumentGenerator.Controllers
 
             try
             {
-                var schemaResult = debug
+                var schemaResult = debugSchema
                     ? GetContractFromCompiledAssemblies<IDocumentSchemaContract>(fileName, "Schema")
                     : await CompileFromFileAsync<IDocumentSchemaContract>(
                         fileName,
@@ -67,7 +68,7 @@ namespace SIHSALUS_DocumentGenerator.Controllers
 
                 if (mappingFile is not null)
                 {
-                    var mappingResult = debug
+                    var mappingResult = debugMapping
                         ? GetContractFromCompiledAssemblies<IDocumentMappingContract>(mappingFile, "Mapping")
                         : await CompileFromFileAsync<IDocumentMappingContract>(
                             mappingFile,
