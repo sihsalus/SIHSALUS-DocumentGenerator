@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using SIHSALUS_DocumentGenerator.Data;
+using SIHSALUS_DocumentGenerator.Services;
 
 LoadDotEnv();
 SetAspNetCoreEnvironmentFromAppMode();
@@ -29,6 +30,7 @@ builder.Configuration["App:SecurityToken"] = securityToken;
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(connectionString));
 
+builder.Services.AddSingleton<IRenderService, RenderService>();
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 

@@ -655,6 +655,21 @@ public record DocumentSchema
         return finalContent;
     }
 
+    /// <summary>
+    /// Renders this document to PDF, preserving the size and print properties defined for each page.
+    /// </summary>
+    public Task<byte[]> RenderPdfAsync(
+        IRenderService renderService,
+        Boolean printLayout,
+        DocumentMapping? docMapping,
+        CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(renderService);
+
+        string html = Render(printLayout, docMapping);
+        return renderService.RenderHtmlToPdfAsync(html, cancellationToken);
+    }
+
     
 }
 
