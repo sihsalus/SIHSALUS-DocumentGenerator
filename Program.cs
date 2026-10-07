@@ -1,25 +1,35 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
+using Npgsql;
 using SIHSALUS_DocumentGenerator.Data;
 using SIHSALUS_DocumentGenerator.Services;
 
-LoadDotEnv();
+// .env is a local-development convenience. Container and host environment
+// variables are loaded by the runtime and always take precedence.
+LoadDotEnv(Path.Combine(Directory.GetCurrentDirectory(), ".env"));
 SetAspNetCoreEnvironmentFromAppMode();
 
 var builder = WebApplication.CreateBuilder(args);
 
-var appPort = GetEnvironmentVariableOrDefault("APP_PORT", GetFirstHttpPortFromAspNetCoreHttpPorts() ?? "3000");
-var appMode = GetEnvironmentVariableOrDefault("APP_MODE", "DEV");
+var appPort = GetPortEnvironmentVariableOrDefault("APP_PORT", GetFirstHttpPortFromAspNetCoreHttpPorts() ?? "3000");
+var appMode = GetEnvironmentVariableOrDefault("APP_MODE", "PROD");
 var encryptionKey = GetRequiredEnvironmentVariable("ENCRYPTION_KEY");
 var securityToken = GetRequiredEnvironmentVariable("SECURITY_TOKEN");
 
 var dbHost = GetRequiredEnvironmentVariable("DB_HOST");
-var dbPort = GetRequiredEnvironmentVariable("DB_PORT");
+var dbPort = GetRequiredPortEnvironmentVariable("DB_PORT");
 var dbName = GetRequiredEnvironmentVariable("DB_NAME");
 var dbUser = GetRequiredEnvironmentVariable("DB_USER");
 var dbPassword = GetRequiredEnvironmentVariable("DB_PASSWORD");
 
-var connectionString = $"Host={dbHost};Port={dbPort};Database={dbName};Username={dbUser};Password={dbPassword}";
+var connectionString = new NpgsqlConnectionStringBuilder
+{
+    Host = dbHost,
+    Port = dbPort,
+    Database = dbName,
+    Username = dbUser,
+    Password = dbPassword
+}.ConnectionString;
 
 builder.WebHost.UseUrls($"http://*:{appPort}");
 
@@ -91,6 +101,26 @@ static string GetEnvironmentVariableOrDefault(string key, string defaultValue)
     return string.IsNullOrWhiteSpace(value) ? defaultValue : value;
 }
 
+static int GetRequiredPortEnvironmentVariable(string key)
+{
+    return ParsePort(key, GetRequiredEnvironmentVariable(key));
+}
+
+static int GetPortEnvironmentVariableOrDefault(string key, string defaultValue)
+{
+    return ParsePort(key, GetEnvironmentVariableOrDefault(key, defaultValue));
+}
+
+static int ParsePort(string key, string value)
+{
+    if (!int.TryParse(value, out var port) || port is < 1 or > 65535)
+    {
+        throw new InvalidOperationException($"Environment variable {key} must be a port between 1 and 65535.");
+    }
+
+    return port;
+}
+
 static string? GetFirstHttpPortFromAspNetCoreHttpPorts()
 {
     var configuredPorts = Environment.GetEnvironmentVariable("ASPNETCORE_HTTP_PORTS");
@@ -127,7 +157,11 @@ static void LoadDotEnv(string filePath = ".env")
         var key = line[..separatorIndex].Trim();
         var value = line[(separatorIndex + 1)..].Trim().Trim('"', '\'');
 
-        Environment.SetEnvironmentVariable(key, value);
+        // Never replace a value injected by the host, Docker, or the deployment platform.
+        if (Environment.GetEnvironmentVariable(key) is null)
+        {
+            Environment.SetEnvironmentVariable(key, value);
+        }
     }
 }
 

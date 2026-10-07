@@ -11,10 +11,12 @@
     "Container (Dockerfile)": {
       "commandName": "Docker",
       "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}",
+      "containerRunEnvironmentFiles": ".env",
       "environmentVariables": {
         "DOCUMENT_CONTENT_ROOT": "/app",
         "ASPNETCORE_HTTP_PORTS": "3000",
-        "APP_PORT": "3000"
+        "APP_PORT": "3000",
+        "APP_MODE": "DEV"
       },
       "httpPort": 3000,
       "publishAllPorts": false,

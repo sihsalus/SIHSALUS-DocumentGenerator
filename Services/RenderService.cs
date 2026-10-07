@@ -2,6 +2,7 @@ using AngleSharp.Dom;
 using AngleSharp.Html.Dom;
 using AngleSharp.Html.Parser;
 using Microsoft.Playwright;
+using SIHSALUS_DocumentGenerator.Models.DocumentEntities.DocumentRenderizationAbstractions;
 using System.Text.RegularExpressions;
 
 namespace SIHSALUS_DocumentGenerator.Services;
@@ -39,11 +40,11 @@ public sealed class RenderService : IRenderService
         "img", "label", "input", "textarea", "select", "option"
     };
 
-    private static readonly HashSet<string> ForbiddenTags = new(StringComparer.OrdinalIgnoreCase)
-    {
+   private static readonly HashSet<string> ForbiddenTags = new(StringComparer.OrdinalIgnoreCase)
+   {
         "script", "noscript", "iframe", "frame", "frameset", "object", "embed", "applet",
         "base", "link", "meta", "svg", "math", "template", "canvas", "video", "audio", "source"
-    };
+   };
 
     private static readonly HashSet<string> AllowedAttributes = new(StringComparer.OrdinalIgnoreCase)
     {
@@ -64,6 +65,48 @@ public sealed class RenderService : IRenderService
     /// <inheritdoc />
     public async Task<byte[]> RenderHtmlToPdfAsync(string html, CancellationToken cancellationToken = default)
     {
+        string sanitizedHtml = SanitizeHtml(html);
+
+        using IPlaywright playwright = await Playwright.CreateAsync();
+        await using IBrowser browser = await playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions
+        {
+            Headless = true
+        });
+        await using IBrowserContext context = await browser.NewContextAsync(new BrowserNewContextOptions
+        {
+            JavaScriptEnabled = false,
+            ViewportSize = new ViewportSize { Width = 1240, Height = 1754 }
+        });
+
+        IPage page = await context.NewPageAsync();
+        page.SetDefaultTimeout(RenderTimeoutMilliseconds);
+        await page.RouteAsync("**/*", route => route.AbortAsync());
+
+        await page.SetContentAsync(sanitizedHtml, new PageSetContentOptions
+        {
+            WaitUntil = WaitUntilState.Load,
+            Timeout = RenderTimeoutMilliseconds
+        });
+        await page.EmulateMediaAsync(new PageEmulateMediaOptions { Media = Media.Print });
+
+        return await page.PdfAsync(new PagePdfOptions
+        {
+            Format = "A4",
+            PrintBackground = true,
+            PreferCSSPageSize = true,
+            Margin = new Margin { Top = "0", Right = "0", Bottom = "0", Left = "0" }
+        });
+    }
+
+    public async Task<byte[]> RenderHtmlSchemaToPdfAsync(DocumentSchema doc, CancellationToken cancellationToken = default)
+    {
+        //Validate pags of doc schema
+        if(doc.pages.Count <= 0)
+        {
+            // Return error, no pages to render
+            //return ErrorEventArgs.Empty;
+        }
+        
         string sanitizedHtml = SanitizeHtml(html);
 
         using IPlaywright playwright = await Playwright.CreateAsync();

@@ -7,10 +7,21 @@
     <RootNamespace>SIHSALUS_DocumentGenerator</RootNamespace>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <DockerfileContext>.</DockerfileContext>
+    <ContainerDevelopmentMode>Regular</ContainerDevelopmentMode>
+    <PlaywrightPackageVersion>1.63.0</PlaywrightPackageVersion>
   </PropertyGroup>
 
   <ItemGroup>
     <None Include=".github\copilot-instructions.md" />
+  </ItemGroup>
+
+  <!-- Playwright starts a package-provided Node driver beside the application assembly. -->
+  <ItemGroup>
+    <Content Include="$(NuGetPackageRoot)microsoft.playwright\$(PlaywrightPackageVersion)\.playwright\**\*">
+      <Link>.playwright\%(RecursiveDir)%(Filename)%(Extension)</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>
@@ -34,6 +45,10 @@
     </Content>
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Remove="Utils\MappingExamples\FUA_Mapping_SETISIS.cs" />
+  </ItemGroup>
+
 
 
   <ItemGroup>
@@ -44,6 +59,7 @@
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.3" />
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="5.0.0" />
     <PackageReference Include="AngleSharp" Version="1.8.1" />
+    <PackageReference Include="SharpZipLib" Version="1.4.2" />
     <PackageReference Include="Microsoft.Playwright" Version="1.63.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="10.0.10">
       <PrivateAssets>all</PrivateAssets>
@@ -53,12 +69,6 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-  </ItemGroup>
-
-
-
-  <ItemGroup>
-    <Folder Include="Utils\VisitExamples\" />
   </ItemGroup>
 
 </Project>

@@ -22,6 +22,9 @@
 **/obj
 **/secrets.dev.yaml
 **/values.dev.yaml
+.env
+.env.*
+!.env.example
 LICENSE
 README.md
 !**/.gitignore
