@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using SIHSALUS_DocumentGenerator.Data;
+using SIHSALUS_DocumentGenerator.Services;
 
 LoadDotEnv();
 SetAspNetCoreEnvironmentFromAppMode();
@@ -23,9 +24,9 @@ var connectionString = $"Host={dbHost};Port={dbPort};Database={dbName};Username=
 builder.WebHost.UseUrls($"http://*:{appPort}");
 
 builder.Configuration["App:Mode"] = appMode;
-builder.Configuration["App:EncryptionKey"] = encryptionKey;
 builder.Configuration["App:SecurityToken"] = securityToken;
 
+builder.Services.AddSingleton(new PayloadEncryptor(encryptionKey));
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(connectionString));
 

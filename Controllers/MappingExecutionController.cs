@@ -4,6 +4,8 @@ using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
+using SIHSALUS_DocumentGenerator.Data;
+using SIHSALUS_DocumentGenerator.Services;
 
 namespace SIHSALUS_DocumentGenerator.Controllers;
 
@@ -12,14 +14,24 @@ namespace SIHSALUS_DocumentGenerator.Controllers;
 public class MappingExecutionController : ControllerBase
 {
     private readonly IWebHostEnvironment _environment;
+    private readonly ApplicationDbContext _dbContext;
+    private readonly PayloadEncryptor _payloadEncryptor;
 
-    public MappingExecutionController(IWebHostEnvironment environment)
+    public MappingExecutionController(
+        IWebHostEnvironment environment,
+        ApplicationDbContext dbContext,
+        PayloadEncryptor payloadEncryptor)
     {
         _environment = environment;
+        _dbContext = dbContext;
+        _payloadEncryptor = payloadEncryptor;
     }
 
     [HttpPost("execute")]
-    public async Task<IActionResult> Execute([FromBody] JsonElement payload, [FromQuery] string mapperFile = "example1.cs")
+    public async Task<IActionResult> Execute(
+        [FromBody] JsonElement payload,
+        [FromQuery] string mapperFile = "example1.cs",
+        CancellationToken cancellationToken = default)
     {
         if (string.IsNullOrWhiteSpace(mapperFile) || !mapperFile.EndsWith(".cs", StringComparison.OrdinalIgnoreCase))
         {
@@ -33,7 +45,7 @@ public class MappingExecutionController : ControllerBase
             return NotFound(new { error = $"Mapper file not found: {safeMapperFile}" });
         }
 
-        var sourceCode = await System.IO.File.ReadAllTextAsync(mapperPath);
+        var sourceCode = await System.IO.File.ReadAllTextAsync(mapperPath, cancellationToken);
         var syntaxTree = CSharpSyntaxTree.ParseText(sourceCode, CSharpParseOptions.Default, mapperPath);
 
         var references = AppDomain.CurrentDomain
@@ -82,15 +94,10 @@ public class MappingExecutionController : ControllerBase
             return BadRequest(new { error = "Mapper method 'Execute' was not found." });
         }
 
+        object? result;
         try
         {
-            var result = method.Invoke(null, [payload]);
-            if (result is not string html)
-            {
-                return BadRequest(new { error = "Mapper returned an invalid result. Expected string HTML." });
-            }
-
-            return Content(html, "text/html");
+            result = method.Invoke(null, [payload]);
         }
         catch (TargetInvocationException ex)
         {
@@ -101,6 +108,21 @@ public class MappingExecutionController : ControllerBase
                 stackTrace = ex.InnerException?.StackTrace ?? ex.StackTrace
             });
         }
+
+        if (result is not string html || string.IsNullOrWhiteSpace(html))
+        {
+            return BadRequest(new { error = "Mapper returned an invalid result. Expected non-empty HTML." });
+        }
+
+        cancellationToken.ThrowIfCancellationRequested();
+        _dbContext.GeneratedFuaPayloads.Add(new GeneratedFuaPayload
+        {
+            EncryptedPayload = _payloadEncryptor.Encrypt(payload),
+            GeneratedAtUtc = DateTime.UtcNow
+        });
+        await _dbContext.SaveChangesAsync(cancellationToken);
+
+        return Content(html, "text/html");
     }
 
     internal static string GetMapperTypeName(string mapperFile)

@@ -9,13 +9,5 @@ public class ApplicationDbContext : DbContext
     {
     }
 
-    // Add your DbSet properties here
-    // Example: public DbSet<YourEntity> YourEntities { get; set; }
-
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
-    {
-        base.OnModelCreating(modelBuilder);
-
-        // Configure your entities here
-    }
+    public DbSet<GeneratedFuaPayload> GeneratedFuaPayloads => Set<GeneratedFuaPayload>();
 }
